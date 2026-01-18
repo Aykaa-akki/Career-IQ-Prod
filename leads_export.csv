@@ -1,0 +1,25 @@
+lead_id,full_name,phone,email,current_role,target_role,linkedin_provided,consent_communication,payment_status,captured_at,converted_to_customer
+5c15ea41-5d64-44a0-9bab-b79680a6149e,"Test User",+91 9876543210,test@example.com,"Software Engineer at TechCorp","Senior Software Engineer at FAANG",false,true,pending,2026-01-12T11:29:42.055327+00:00,false
+80f785ac-ea4e-4bca-9842-8897a41cbcff,"TEST_John Doe",+919876543210,test_john@example.com,"Software Engineer at TechCorp","Senior Software Engineer at FAANG",false,true,pending,2026-01-12T11:31:22.043801+00:00,false
+b9d77b46-d8f5-425b-ae6d-158a174e15f2,"TEST_Upload User",+919876543210,test_upload@example.com,"Product Manager","Senior Product Manager",false,false,pending,2026-01-12T11:31:22.221982+00:00,false
+73525107-3e5d-4774-9c04-be912b35fad7,"TEST_Upload User",+919876543210,test_upload@example.com,"Product Manager","Senior Product Manager",false,false,pending,2026-01-12T11:31:22.327686+00:00,false
+748a1dba-5428-4eb8-a543-6b6272a45c04,"TEST_Order User",+919876543210,test_order@example.com,"Data Analyst","Data Scientist",false,true,pending,2026-01-12T11:31:22.519441+00:00,false
+aa6da468-f06b-4aa1-b19f-8dd29a33b1ff,"TEST_Order User",+919876543210,test_order@example.com,"Data Analyst","Data Scientist",false,true,pending,2026-01-12T11:31:22.600448+00:00,false
+24dd3395-31b0-4026-b9ef-335357521276,"TEST_Order User",+919876543210,test_order@example.com,"Data Analyst","Data Scientist",false,true,pending,2026-01-12T11:31:22.714892+00:00,false
+a7844ba6-95e6-4e4a-9f67-8380b876feea,"TEST_Order User",+919876543210,test_order@example.com,"Data Analyst","Data Scientist",false,true,pending,2026-01-12T11:31:22.804507+00:00,false
+604b43cd-6d36-43dc-a102-fa1faee94f95,"TEST_Integration User",+919876543210,test_integration@example.com,"Marketing Manager at StartupXYZ","VP Marketing at Series B Startup",false,true,pending,2026-01-12T11:31:23.014362+00:00,false
+f9dd4ed5-d961-426a-b6d1-3680002cf27b,"TEST_Analyze User",+919876543210,test_analyze@example.com,"Engineer","Senior Engineer",false,false,pending,2026-01-12T11:31:23.135477+00:00,false
+db24703c-c33c-4a5e-b53b-12b27b5e5efa,"Test User",+919876543210,test@example.com,"Engineer","Senior Engineer",false,true,pending,2026-01-12T11:31:30.162604+00:00,false
+91d6e0ba-742a-4492-880b-ea37fe4f1d0c,"Test User PDF",+919876543210,testpdf@example.com,"Engineer","Senior Engineer",false,true,pending,2026-01-12T11:31:58.559199+00:00,false
+d523fad3-b541-45e1-90a4-19dd86cdd2ad,"TEST_John Doe",+919876543210,test_john@example.com,"Software Engineer at TechCorp","Senior Software Engineer at FAANG",false,true,pending,2026-01-12T11:33:05.955403+00:00,false
+a233ddb2-67c4-42dc-82ae-5bb3196503d3,"TEST_Upload User",+919876543210,test_upload@example.com,"Product Manager","Senior Product Manager",false,false,pending,2026-01-12T11:33:06.148236+00:00,false
+4e262353-0caf-4d4e-933c-70ecad908ed2,"TEST_Upload User",+919876543210,test_upload@example.com,"Product Manager","Senior Product Manager",true,false,pending,2026-01-12T11:33:06.241709+00:00,false
+e5102803-349d-4465-b097-fa2ca14e72cd,"TEST_Order User",+919876543210,test_order@example.com,"Data Analyst","Data Scientist",false,true,pending,2026-01-12T11:33:06.414843+00:00,false
+1d07c90a-1cb7-4ece-b8c3-6447a857af84,"TEST_Order User",+919876543210,test_order@example.com,"Data Analyst","Data Scientist",false,true,pending,2026-01-12T11:33:06.813815+00:00,false
+b0d1197a-812b-4f50-b7f0-33a2bbd7290c,"TEST_Order User",+919876543210,test_order@example.com,"Data Analyst","Data Scientist",false,true,pending,2026-01-12T11:33:07.238720+00:00,false
+40fc00f8-8fc6-4d04-b95f-73703c6ff3af,"TEST_Order User",+919876543210,test_order@example.com,"Data Analyst","Data Scientist",false,true,pending,2026-01-12T11:33:07.639234+00:00,false
+3b8eb61b-b270-4a80-a1d9-072f72dcccbd,"TEST_Integration User",+919876543210,test_integration@example.com,"Marketing Manager at StartupXYZ","VP Marketing at Series B Startup",false,true,pending,2026-01-12T11:33:07.917824+00:00,false
+e74d4229-d25c-4fd5-a5d6-90717a78a7e9,"TEST_Analyze User",+919876543210,test_analyze@example.com,"Engineer","Senior Engineer",false,false,pending,2026-01-12T11:33:08.380067+00:00,false
+01cbec0f-ffe9-41e2-a080-d5d1cb4a866f,"Test User Frontend",+919876543210,testfrontend@example.com,"Software Engineer at TechCorp","Senior Software Engineer at FAANG",false,true,pending,2026-01-12T11:34:15.165933+00:00,false
+3fe136cc-12cd-4515-88fb-b61f3128a188,"Sunil Atal",+918800094695,sunilatal01@gmail.com,"Product Marketing Manager at coolboots media private limited","Marketing head",false,true,pending,2026-01-12T11:46:01.938491+00:00,false
+00f4c8c3-659b-4938-b491-e4c06fdf7e0c,"Sunil AtL",8800094695,sunilatal01@gmail.com,"Product Marketing Manager at coolbootsmedia private limited","Marketing head",true,true,completed,2026-01-12T11:47:33.073699+00:00,true

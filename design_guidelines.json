@@ -1,0 +1,117 @@
+{
+  "identity": {
+    "name": "CareerIQ",
+    "tagline": "Career Intelligence. Not Advice.",
+    "tone": "Authoritative, Precision, High-Stakes, Data-Driven",
+    "aesthetic": "Dark Mode Premium (Netflix/Apple style), Cinematic, High Contrast"
+  },
+  "typography": {
+    "headings": {
+      "font_family": "Syne, sans-serif",
+      "import_url": "https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&display=swap",
+      "usage": "Use for all H1-H3. Tight tracking (-0.02em).",
+      "weights": ["700", "800"]
+    },
+    "body": {
+      "font_family": "Manrope, sans-serif",
+      "import_url": "https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&display=swap",
+      "usage": "Use for body text, UI elements, data labels.",
+      "weights": ["300", "400", "500"]
+    },
+    "mono": {
+      "font_family": "JetBrains Mono, monospace",
+      "import_url": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap",
+      "usage": "Use for data values, code snippets, and 'intelligence' metrics."
+    }
+  },
+  "colors": {
+    "theme": "dark",
+    "palette": {
+      "background": "#050505",
+      "surface": "#0A0A0A",
+      "surface_highlight": "#171717",
+      "border": "#262626",
+      "primary": "#6366f1",
+      "primary_glow": "rgba(99, 102, 241, 0.5)",
+      "accent_cyan": "#06b6d4",
+      "accent_warning": "#f97316",
+      "accent_danger": "#ef4444",
+      "text_primary": "#ffffff",
+      "text_secondary": "#a3a3a3",
+      "text_muted": "#525252"
+    },
+    "gradients": {
+      "hero_glow": "radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%)",
+      "card_surface": "linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%)",
+      "beam_border": "linear-gradient(90deg, transparent, #6366f1, transparent)"
+    }
+  },
+  "layout_strategies": {
+    "landing_page": {
+      "grid_type": "Tetris Grid",
+      "container_width": "max-w-7xl",
+      "spacing": "Generous (gap-8 to gap-24)",
+      "rules": [
+        "Use asymmetry in the hero section.",
+        "Do not center everything. Use left-align for serious content.",
+        "Use 'sticky' scrolling sections for 'How it Works'."
+      ]
+    },
+    "report_page": {
+      "grid_type": "Control Room Grid",
+      "density": "High",
+      "rules": [
+        "Bento grid layout for metrics.",
+        "Dark cards with 1px subtle borders.",
+        "No white backgrounds anywhere."
+      ]
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-primary text-white hover:bg-primary/90 rounded-full px-8 py-6 text-lg font-bold shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all hover:scale-105",
+      "secondary": "bg-white/5 border border-white/10 text-white hover:bg-white/10 rounded-full px-6 py-4 backdrop-blur-md"
+    },
+    "cards": {
+      "style": "bg-black/40 border border-white/10 backdrop-blur-xl rounded-2xl p-8 hover:border-white/20 transition-colors",
+      "glass": "bg-white/5 backdrop-blur-2xl border border-white/10"
+    },
+    "inputs": {
+      "style": "bg-black/50 border-white/10 focus:border-primary/50 focus:ring-primary/20 h-14 rounded-xl text-lg"
+    }
+  },
+  "visual_assets": {
+    "images": {
+      "hero_bg": "https://images.unsplash.com/photo-1762279389006-43963a0cee55?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "city_night": "https://images.unsplash.com/photo-1762429648253-b8bc921c8b30?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "testimonial_1": "https://images.unsplash.com/photo-1758534063829-a72058381e21?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "testimonial_2": "https://images.unsplash.com/photo-1758600587730-a11917c13b85?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "abstract_grid": "https://images.unsplash.com/photo-1760978632014-f799595497af?crop=entropy&cs=srgb&fm=jpg&q=85"
+    },
+    "icons": "Use 'lucide-react' with thin stroke widths (1.5px) for elegance."
+  },
+  "motion": {
+    "library": "framer-motion",
+    "scroll": "lenis (MANDATORY for premium feel)",
+    "transitions": {
+      "hover": "transition-all duration-300 ease-out",
+      "page_load": "initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}"
+    }
+  },
+  "instructions_to_main_agent": [
+    "1. CLEANUP: Remove standard React logos and 'App.css' centering.",
+    "2. SETUP: Install 'lenis', 'framer-motion', 'clsx', 'tailwind-merge' immediately.",
+    "3. FONTS: Add the Google Fonts imports to 'index.css' immediately.",
+    "4. THEME: Force dark mode in 'index.html' by adding class='dark' to the html tag.",
+    "5. LANDING: Build the landing page using the 'Tetris Grid' layout. Do not use standard Bootstrap columns.",
+    "6. ORDER FLOW: Make the order page feel like a 'Mission Control' setup. Step-by-step, high precision.",
+    "7. REPORT: The report page is the product. It must look like a high-end financial terminal or military dashboard."
+  ],
+  "universal_guidelines": [
+    "Do not use gradients for text unless it's a very subtle shine.",
+    "Avoid 'Inter' font. Use 'Syne' for headings to stand out.",
+    "Use 2x more padding than you think is necessary.",
+    "Every interactive element must have a hover state.",
+    "Use 'sonner' for all toast notifications."
+  ]
+}

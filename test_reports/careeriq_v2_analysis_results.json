@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-01-09T12:17:32.957045",
+  "test_type": "careeriq_v2_analysis_pipeline",
+  "total_tests": 4,
+  "passed_tests": 4,
+  "success_rate": 100.0,
+  "session_id": "32a02c70-2cd9-4752-82ff-b19f5a287333",
+  "analysis_report_available": false,
+  "test_results": [
+    {
+      "test": "Version 2.0 Health Check",
+      "success": true,
+      "details": "Version: 2.0, Expected: 2.0",
+      "timestamp": "2026-01-09T12:17:32.412443"
+    },
+    {
+      "test": "Upload Substantial Content",
+      "success": true,
+      "details": "Session ID: 32a02c70..., Resume length: 3690, LinkedIn length: 4274",
+      "timestamp": "2026-01-09T12:17:32.501413"
+    },
+    {
+      "test": "Payment Flow Test",
+      "success": true,
+      "details": "Order created: order_S1mE..., Payment endpoint response: 400",
+      "timestamp": "2026-01-09T12:17:32.917252"
+    },
+    {
+      "test": "Analysis Endpoint Structure",
+      "success": true,
+      "details": "Correctly requires payment (402)",
+      "timestamp": "2026-01-09T12:17:32.956262"
+    }
+  ]
+}

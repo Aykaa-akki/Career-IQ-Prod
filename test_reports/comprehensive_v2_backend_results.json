@@ -1,0 +1,87 @@
+{
+  "timestamp": "2026-01-09T12:18:35.363917",
+  "test_type": "comprehensive_careeriq_v2_backend",
+  "total_tests": 10,
+  "passed_tests": 8,
+  "success_rate": 80.0,
+  "test_categories": {
+    "v2_features": {
+      "passed": 2,
+      "total": 2
+    },
+    "file_upload": {
+      "passed": 0,
+      "total": 1
+    },
+    "pipeline_endpoints": {
+      "passed": 6,
+      "total": 6
+    },
+    "workflow": {
+      "passed": 1,
+      "total": 1
+    }
+  },
+  "test_results": [
+    {
+      "test": "Backend API Health Returns Version 2.0",
+      "success": true,
+      "details": "Version: 2.0, Service: careeriq-backend",
+      "timestamp": "2026-01-09T12:18:35.068291"
+    },
+    {
+      "test": "Root API Endpoint Returns Version 2.0",
+      "success": true,
+      "details": "Root endpoint version: 2.0",
+      "timestamp": "2026-01-09T12:18:35.111279"
+    },
+    {
+      "test": "Payment Integration (Razorpay) Working",
+      "success": true,
+      "details": "Razorpay key format valid: rzp_test_S...",
+      "timestamp": "2026-01-09T12:18:35.148313"
+    },
+    {
+      "test": "File Upload with Substantial Resume/LinkedIn Content",
+      "success": false,
+      "details": "Status: 400, Response: {\"detail\":\"Resume appears to be empty or unreadable. Please upload a valid resume.\"}",
+      "timestamp": "2026-01-09T12:18:35.187462"
+    },
+    {
+      "test": "Analysis Pipeline Entry Point Endpoint",
+      "success": true,
+      "details": "Endpoint exists, returns 422",
+      "timestamp": "2026-01-09T12:18:35.220801"
+    },
+    {
+      "test": "Payment Verification Endpoint",
+      "success": true,
+      "details": "Endpoint exists, returns 422",
+      "timestamp": "2026-01-09T12:18:35.258533"
+    },
+    {
+      "test": "Tier Upgrade Endpoint",
+      "success": true,
+      "details": "Endpoint exists, returns 422",
+      "timestamp": "2026-01-09T12:18:35.297085"
+    },
+    {
+      "test": "Upgrade Payment Verification Endpoint",
+      "success": true,
+      "details": "Endpoint exists, returns 422",
+      "timestamp": "2026-01-09T12:18:35.330007"
+    },
+    {
+      "test": "Email Report Generation Endpoint",
+      "success": true,
+      "details": "Endpoint exists, returns 422",
+      "timestamp": "2026-01-09T12:18:35.363181"
+    },
+    {
+      "test": "Complete Workflow Structure",
+      "success": false,
+      "details": "No session ID available",
+      "timestamp": "2026-01-09T12:18:35.363854"
+    }
+  ]
+}

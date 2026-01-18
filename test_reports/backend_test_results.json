@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-01-09T12:51:54.960390",
+  "total_tests": 7,
+  "passed_tests": 7,
+  "success_rate": 100.0,
+  "session_id": "bb25e662-2bab-41a5-9ada-d4fcf8231b63",
+  "test_results": [
+    {
+      "test": "Health Check",
+      "success": true,
+      "details": "Status: 200, Response: {'status': 'healthy', 'service': 'careeriq-backend', 'version': '2.0'}",
+      "timestamp": "2026-01-09T12:51:54.209346"
+    },
+    {
+      "test": "Razorpay Key Retrieval",
+      "success": true,
+      "details": "Key ID: rzp_test_S...",
+      "timestamp": "2026-01-09T12:51:54.263340"
+    },
+    {
+      "test": "File Upload",
+      "success": true,
+      "details": "Session ID: bb25e662...",
+      "timestamp": "2026-01-09T12:51:54.321009"
+    },
+    {
+      "test": "Create Order",
+      "success": true,
+      "details": "Order ID: order_S1mp..., Amount: 49900",
+      "timestamp": "2026-01-09T12:51:54.655462"
+    },
+    {
+      "test": "Session Status",
+      "success": true,
+      "details": "Status: uploaded, Payment: pending",
+      "timestamp": "2026-01-09T12:51:54.690189"
+    },
+    {
+      "test": "Report Endpoint",
+      "success": true,
+      "details": "Status: uploaded, Message: Session exists but analysis not started",
+      "timestamp": "2026-01-09T12:51:54.769572"
+    },
+    {
+      "test": "LLM Pipeline Endpoints Exist",
+      "success": true,
+      "details": "/api/analyze: EXISTS; /api/verify-payment: EXISTS; /api/upgrade: EXISTS; /api/verify-upgrade: EXISTS; /api/send-report: EXISTS",
+      "timestamp": "2026-01-09T12:51:54.959259"
+    }
+  ]
+}

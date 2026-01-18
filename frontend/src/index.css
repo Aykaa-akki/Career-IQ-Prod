@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #050508;
+  --surface: #0A0A0F;
+  --surface-highlight: #12121A;
+  --border: #1E1E2E;
+  --primary: #6366f1;
+  --primary-glow: rgba(99, 102, 241, 0.4);
+  --accent-cyan: #22d3ee;
+  --accent-warning: #f97316;
+  --accent-danger: #ef4444;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --text-muted: #52525b;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--background);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #6366f1 0%, #22d3ee 50%, #6366f1 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+  100% { background-position: 0% center; }
+}
+
+/* Highlight text */
+.highlight {
+  color: #22d3ee;
+  font-weight: 600;
+}
+
+.highlight-warning {
+  color: #f97316;
+  font-weight: 600;
+}
+
+.highlight-primary {
+  color: #6366f1;
+  font-weight: 600;
+}
+
+/* Glow effects */
+.glow-primary {
+  box-shadow: 0 0 40px var(--primary-glow);
+}
+
+.text-glow {
+  text-shadow: 0 0 30px var(--primary-glow);
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(10, 10, 15, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Hero gradient */
+.hero-gradient {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.2) 0%, transparent 50%);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px var(--primary-glow); }
+  50% { box-shadow: 0 0 40px var(--primary-glow); }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+/* Selection */
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
+/* Tailwind layer overrides */
+@layer base {
+  :root {
+    --background: 240 10% 2%;
+    --foreground: 0 0% 100%;
+    --card: 240 10% 4%;
+    --card-foreground: 0 0% 100%;
+    --popover: 240 10% 4%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 10% 8%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 240 10% 8%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 240 10% 8%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 10% 12%;
+    --input: 240 10% 12%;
+    --ring: 239 84% 67%;
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* File upload styles */
+.file-drop-zone {
+  @apply border-2 border-dashed border-white/20 rounded-2xl p-6 md:p-8 text-center cursor-pointer transition-all duration-300;
+}
+
+.file-drop-zone:hover {
+  @apply border-primary/50 bg-white/5;
+}
+
+.file-drop-zone.active {
+  @apply border-primary bg-primary/10;
+}
+
+/* Button fixes */
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold rounded-full transition-all duration-300;
+  @apply hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98];
+  @apply shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.4)];
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 bg-white/5 text-white font-medium rounded-full border border-white/10 transition-all duration-300;
+  @apply hover:bg-white/10 hover:border-white/20;
+}
+
+/* Card styles */
+.card {
+  @apply bg-[#0A0A0F] border border-white/10 rounded-2xl transition-all duration-300;
+}
+
+.card:hover {
+  @apply border-white/20;
+}
+
+.card-featured {
+  @apply relative bg-[#0A0A0F] rounded-2xl;
+  border: 2px solid var(--primary);
+}
+
+.card-featured::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, var(--primary), var(--accent-cyan));
+  border-radius: inherit;
+  z-index: -1;
+  filter: blur(20px);
+  opacity: 0.4;
+}
+
+/* Report section */
+.report-section {
+  @apply relative pl-5 border-l-2 border-primary/50;
+}
+
+/* Loading dots */
+.loading-dots span {
+  @apply inline-block;
+  animation: loadingDots 1.4s infinite;
+}
+
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes loadingDots {
+  0%, 80%, 100% { opacity: 0.3; }
+  40% { opacity: 1; }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  h1 { font-size: 2rem !important; line-height: 1.1 !important; }
+  h2 { font-size: 1.5rem !important; }
+  .container { padding-left: 1rem; padding-right: 1rem; }
+}
