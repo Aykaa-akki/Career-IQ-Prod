@@ -141,7 +141,12 @@ export default function ProcessingPage() {
             // Set redirecting state and navigate
             setIsRedirecting(true);
             setTimeout(() => {
-              navigate(`/report/${sessionId}`);
+              // Navigate to appropriate report page based on route
+              if (isUpsellRoute) {
+                navigate(`/complete_analyis/${sessionId}`);
+              } else {
+                navigate(`/Intelligence_report_verdict/${sessionId}`);
+              }
             }, 500);
           } else {
             setHorizontalProgress(currentProgress);
