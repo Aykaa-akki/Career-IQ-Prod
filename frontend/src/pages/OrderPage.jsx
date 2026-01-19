@@ -206,7 +206,7 @@ export default function OrderPage() {
               session_id: sessionId
             });
 
-            navigate(`/processing/${sessionId}`);
+            navigate(`/Intelligence_report_generation/${sessionId}`);
           } catch (err) {
             toast.error("Payment verification failed. Please contact support.");
             setIsProcessing(false);
