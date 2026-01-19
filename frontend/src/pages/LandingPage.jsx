@@ -896,9 +896,9 @@ export default function LandingPage() {
   const navigate = useNavigate();
 
   const handleCTA = () => {
-    // Navigate to order page - UTM params are already persisted in localStorage
+    // Navigate to checkout page - UTM params are already persisted in localStorage
     // and will be read by OrderPage when submitting
-    navigate("/order");
+    navigate("/checkout");
   };
 
   return (
