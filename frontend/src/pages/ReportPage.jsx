@@ -83,7 +83,7 @@ export default function ReportPage() {
         const res = await axios.get(`${API_URL}/api/report/${sessionId}`);
         
         if (res.data.status === "processing") {
-          navigate(`/processing/${sessionId}`);
+          navigate(`/Intelligence_report_generation/${sessionId}`);
           return;
         }
         
