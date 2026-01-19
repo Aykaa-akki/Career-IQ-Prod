@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, AlertCircle, Brain } from "lucide-react";
 import axios from "axios";
@@ -61,6 +61,10 @@ function CircularProgress({ percent, size = 22, strokeWidth = 2.5 }) {
 export default function ProcessingPage() {
   const { sessionId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Check if this is an upsell processing page
+  const isUpsellRoute = location.pathname.includes('complete_analyis_generation');
 
   // Backend-driven state (authoritative)
   const [backendStep, setBackendStep] = useState(0);
