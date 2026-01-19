@@ -163,7 +163,7 @@ export default function ReportPage() {
               session_id: sessionId
             });
             toast.success("Upgrade successful!");
-            navigate(`/processing/${sessionId}`);
+            navigate(`/complete_analyis_generation/${sessionId}`);
           } catch (err) {
             toast.error("Upgrade failed");
           }
