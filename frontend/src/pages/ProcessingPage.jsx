@@ -212,7 +212,7 @@ export default function ProcessingPage() {
       mounted = false;
       clearInterval(interval);
     };
-  }, [sessionId, calculateHorizontalProgress, isFinalizingStep5, step5Completed, navigate]);
+  }, [sessionId, calculateHorizontalProgress, isFinalizingStep5, step5Completed, navigate, isUpsellRoute]);
 
   // Time-based circular progress animation for active step
   useEffect(() => {
