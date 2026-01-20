@@ -17,7 +17,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#050505]">
-      <BrowserRouter basename="/career-iq">
+      <BrowserRouter>
         <Routes>
           {/* Home page */}
           <Route path="/" element={<LandingPage />} />
@@ -32,14 +32,13 @@ function App() {
           <Route path="/Intelligence_report_verdict/:sessionId" element={<ReportPage />} />
           
           {/* Upsell processing - Complete analysis generation */}
-          <Route path="/complete_analyis_generation/:sessionId" element={<ProcessingPage isUpsell={true} />} />
+          <Route path="/complete_analyis_generation/:sessionId" element={<ProcessingPage />} />
           
           {/* Upsell report - Complete analysis */}
           <Route path="/complete_analyis/:sessionId" element={<ReportPage />} />
           
-          {/* Legacy routes (redirect support) */}
+          {/* Legacy routes */}
           <Route path="/order" element={<OrderPage />} />
-          <Route path="/order/:tier" element={<OrderPage />} />
           <Route path="/processing/:sessionId" element={<ProcessingPage />} />
           <Route path="/report/:sessionId" element={<ReportPage />} />
         </Routes>
