@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/career-iq",
+  "homepage": ".",
   "engines": {
     "node": ">=20.0.0"
   },
