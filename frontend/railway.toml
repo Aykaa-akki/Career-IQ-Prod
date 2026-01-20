@@ -3,5 +3,5 @@ builder = "nixpacks"
 
 [deploy]
 startCommand = "npx serve -s build -l $PORT"
-healthcheckPath = "/career-iq/"
+healthcheckPath = "/"
 healthcheckTimeout = 100
