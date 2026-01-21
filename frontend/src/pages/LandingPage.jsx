@@ -1632,23 +1632,30 @@ export default function LandingPage() {
 
       {/* ===== SECTION 10: FOOTER ===== */}
       <footer className="px-4 py-12 border-t border-white/5">
-        <div className="max-w-3xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto text-center">
           {/* Disclaimer */}
-          <p className="text-zinc-600 text-xs mb-6 max-w-lg mx-auto">
-            This report reflects market interpretation patterns based on the information you provide. 
-            It does not guarantee interviews or outcomes.
-          </p>
+          <div className="text-zinc-600 text-xs mb-8 max-w-3xl mx-auto leading-relaxed space-y-3">
+            <p>
+              <span className="text-zinc-500 font-medium">DISCLAIMER:</span> This website is not affiliated with or endorsed by LinkedIn™, Naukri™, Indeed™, or any third-party job platforms or recruitment agencies. All trademarks and brand names are property of their respective owners and used for identification purposes only.
+            </p>
+            <p>
+              CareerIQ provides career intelligence signals and market interpretation analysis based solely on the information you provide (resume, LinkedIn profile, target role). Each report is unique to the user's input, and results will vary based on individual profiles, career history, and market conditions. The insights provided are analytical observations, not guarantees of interview calls, job offers, or career outcomes.
+            </p>
+            <p>
+              <span className="text-zinc-500 font-medium">REFUND POLICY:</span> As this is a digital report delivered instantly upon generation, all sales are final. Refunds will only be issued in cases where the report fails to generate due to technical issues, subject to validation and proof of the issue. No refunds will be provided for dissatisfaction with report content, as the analysis is based on the information provided by the user.
+            </p>
+          </div>
 
           {/* Footer Links */}
-          <div className="flex justify-center gap-6 text-zinc-500 text-sm">
-            <a href="/privacy" className="hover:text-zinc-300 transition-colors">Privacy Policy</a>
-            <a href="/terms" className="hover:text-zinc-300 transition-colors">Terms of Use</a>
-            <a href="mailto:support@careeriq.in" className="hover:text-zinc-300 transition-colors">Support</a>
+          <div className="flex justify-center gap-6 text-zinc-500 text-sm mb-6">
+            <a href="/privacy-policy" className="hover:text-zinc-300 transition-colors">Privacy Policy</a>
+            <a href="/terms-of-use" className="hover:text-zinc-300 transition-colors">Terms of Use</a>
+            <a href="mailto:support.career-iq@aykaa.me" className="hover:text-zinc-300 transition-colors">Support</a>
           </div>
 
           {/* Brand */}
-          <p className="text-zinc-700 text-xs mt-8">
-            © {new Date().getFullYear()} CareerIQ
+          <p className="text-zinc-700 text-xs">
+            © {new Date().getFullYear()} CareerIQ by Aykaa. All rights reserved.
           </p>
         </div>
       </footer>
