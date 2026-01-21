@@ -5,6 +5,8 @@ import LandingPage from "./pages/LandingPage";
 import OrderPage from "./pages/OrderPage";
 import ReportPage from "./pages/ReportPage";
 import ProcessingPage from "./pages/ProcessingPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import TermsOfUsePage from "./pages/TermsOfUsePage";
 import { captureUTMParams, pushUTMToDataLayer } from "./utils/utm";
 import "./App.css";
 
@@ -36,6 +38,10 @@ function App() {
           
           {/* Upsell report - Complete analysis */}
           <Route path="/complete_analyis/:sessionId" element={<ReportPage />} />
+          
+          {/* Legal pages */}
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms-of-use" element={<TermsOfUsePage />} />
           
           {/* Legacy routes */}
           <Route path="/order" element={<OrderPage />} />
