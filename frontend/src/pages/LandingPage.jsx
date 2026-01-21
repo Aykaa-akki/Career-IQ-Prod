@@ -1641,9 +1641,6 @@ export default function LandingPage() {
             <p>
               CareerIQ provides career intelligence signals and market interpretation analysis based solely on the information you provide (resume, LinkedIn profile, target role). Each report is unique to the user's input, and results will vary based on individual profiles, career history, and market conditions. The insights provided are analytical observations, not guarantees of interview calls, job offers, or career outcomes.
             </p>
-            <p>
-              <span className="text-zinc-500 font-medium">REFUND POLICY:</span> As this is a digital report delivered instantly upon generation, all sales are final. Refunds will only be issued in cases where the report fails to generate due to technical issues, subject to validation and proof of the issue. No refunds will be provided for dissatisfaction with report content, as the analysis is based on the information provided by the user.
-            </p>
           </div>
 
           {/* Footer Links */}
