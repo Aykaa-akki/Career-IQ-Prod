@@ -72,3 +72,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 # Deploy 1768889239
 # Simplified routes 1768890177
 # Added legal pages 1768993943
+# Removed refund from footer 1768994036
