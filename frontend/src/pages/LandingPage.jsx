@@ -925,9 +925,8 @@ export default function LandingPage() {
             className="text-center"
           >
             {/* Headline - bigger on mobile */}
-            <h1 className="text-4xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight">
-              Stop Getting{" "}
-              <br className="sm:hidden" />
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight">
+              Top 1% Professionals Move Ahead{" "}
               <span 
                 style={{
                   background: "linear-gradient(to right, #6366f1, #22d3ee)",
@@ -936,14 +935,17 @@ export default function LandingPage() {
                   backgroundClip: "text"
                 }}
               >
-                Silently Rejected
+                3× Faster
               </span>
+              <br className="hidden sm:block" />
+              {" "}While 80% Stay Invisible to Recruiters
             </h1>
 
             {/* Subheadline - tighter spacing */}
             <p className="text-zinc-400 text-sm sm:text-base md:text-lg max-w-xl mx-auto mb-6 leading-relaxed">
-              You apply to roles with a strong resume and a polished LinkedIn.
-              Yet recruiters don&apos;t respond — or stop shortlisting you without explanation.
+              Most people keep fixing their resume and LinkedIn profile.
+              <br className="hidden sm:block" />
+              Top performers fix what recruiters actually judge.
             </p>
 
             {/* Visual: Career Signal Flow (Desktop: horizontal, Mobile: vertical) */}
@@ -953,8 +955,8 @@ export default function LandingPage() {
 
             {/* New explanatory text below diagram - tighter */}
             <p className="text-zinc-400 text-xs sm:text-sm max-w-lg mx-auto mb-6 leading-relaxed">
-              If this feels familiar, you&apos;re not alone. This isn&apos;t about your resume or LinkedIn. 
-              It&apos;s about the signals recruiters actually screen for.
+              You apply to roles with a strong resume and a polished LinkedIn.
+              Yet recruiters don&apos;t respond — or stop shortlisting you without explanation.
             </p>
 
             {/* CTA */}
