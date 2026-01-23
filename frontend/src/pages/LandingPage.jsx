@@ -937,8 +937,8 @@ export default function LandingPage() {
               >
                 3× Faster
               </span>
-              <br className="hidden sm:block" />
-              {" "}While 80% Stay Invisible to Recruiters
+              <br className="hidden md:block" />
+              <span className="md:block"> While 80% Stay Invisible to Recruiters</span>
             </h1>
 
             {/* Subheadline - tighter spacing */}
