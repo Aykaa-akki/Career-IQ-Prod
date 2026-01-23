@@ -935,10 +935,10 @@ export default function LandingPage() {
                   backgroundClip: "text"
                 }}
               >
-                3× Faster
+                12× Faster
               </span>
               <br className="hidden md:block" />
-              <span className="md:block"> While 80% Stay Invisible to Recruiters</span>
+              <span className="md:block"> While <span className="text-red-500">80% Stay Invisible</span> to Recruiters</span>
             </h1>
 
             {/* Subheadline - tighter spacing */}
