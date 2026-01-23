@@ -141,6 +141,13 @@ export default function OrderPage() {
       return;
     }
 
+    // Meta Tracking: Push dataLayer event for AddToCart tracking
+    // This fires BEFORE payment flow starts (for GTM → Meta AddToCart)
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'careerIQ_payment_cta_click'
+    });
+
     setIsProcessing(true);
 
     // Get UTM parameters for attribution tracking
