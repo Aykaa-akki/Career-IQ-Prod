@@ -1582,26 +1582,20 @@ export default function LandingPage() {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="mb-8 md:mb-10"
           >
-            <ul className="space-y-3 md:space-y-4 max-w-md mx-auto">
-              <li className="flex items-start gap-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></span>
-                <span className="text-zinc-200 text-sm md:text-[15px] font-medium leading-relaxed">
-                  Know why you&apos;re not getting shortlisted — before applying again
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></span>
-                <span className="text-zinc-200 text-sm md:text-[15px] font-medium leading-relaxed">
-                  See how recruiters are <em className="not-italic text-white">actually reading</em> your profile
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></span>
-                <span className="text-zinc-200 text-sm md:text-[15px] font-medium leading-relaxed">
-                  Make your next career move with clarity, not guesswork
-                </span>
-              </li>
-            </ul>
+            <div className="max-w-lg mx-auto text-center space-y-4">
+              <h3 className="text-lg sm:text-xl font-semibold text-white leading-snug">
+                Why Most Skilled Professionals Stay Stuck — Even With a &quot;Good&quot; Resume
+              </h3>
+              <p className="text-zinc-300 text-sm sm:text-base leading-relaxed">
+                Your resume isn&apos;t the problem. Your career strategy is.
+              </p>
+              <p className="text-zinc-400 text-sm leading-relaxed">
+                This Career Intelligence Report shows how recruiters actually read your profile — and why it&apos;s being ignored before interviews even happen.
+              </p>
+              <p className="text-zinc-500 text-xs sm:text-sm italic">
+                Built from real hiring patterns and recruiter decision signals, not generic resume advice.
+              </p>
+            </div>
           </motion.div>
 
           {/* 5. Primary CTA - Single, decisive */}
