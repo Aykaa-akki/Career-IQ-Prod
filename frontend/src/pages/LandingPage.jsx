@@ -1431,7 +1431,7 @@ export default function LandingPage() {
               <div className="absolute top-3 right-3 md:top-4 md:right-4">
                 <div className="flex items-center gap-1.5 bg-white/[0.03] border border-white/10 rounded-full px-2.5 py-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span className="text-[10px] text-zinc-400 font-medium">Automated</span>
+                  <span className="text-[10px] text-zinc-400 font-medium">Recruiter-Tested</span>
                 </div>
               </div>
             </div>
