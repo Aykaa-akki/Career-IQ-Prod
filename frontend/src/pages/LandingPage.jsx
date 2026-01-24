@@ -1149,7 +1149,7 @@ export default function LandingPage() {
                 <span className="block text-xl sm:text-2xl md:text-3xl text-zinc-600 font-medium mt-1">(But Rarely Explain)</span>
               </h2>
               <div className="text-zinc-600 text-base md:text-lg max-w-2xl mx-auto leading-relaxed space-y-2">
-                <p>Recruiters don't reject resumes. They reject unclear signals.</p>
+                <p>Recruiters don&apos;t reject resumes. They reject unclear signals.</p>
                 <p className="text-zinc-500 text-sm md:text-base">
                   These decisions happen silently — often in under 7 seconds —
                   <br className="hidden sm:block" />
@@ -1157,7 +1157,7 @@ export default function LandingPage() {
                 </p>
               </div>
               <p className="text-zinc-800 font-medium mt-4 text-sm md:text-base">
-                Here's what they're really judging:
+                Here&apos;s what they&apos;re really judging:
               </p>
             </motion.div>
 
