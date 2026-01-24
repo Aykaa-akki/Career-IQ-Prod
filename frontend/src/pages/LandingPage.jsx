@@ -1040,7 +1040,7 @@ export default function LandingPage() {
             <h2 className="text-[22px] sm:text-3xl md:text-4xl font-bold leading-snug md:leading-tight">
               Why <span className="text-red-500">80%</span> of Professionals{" "}
               <span className="text-red-500">Are Rejected</span>
-              <span className="block mt-1">Even With a "Good" Resume</span>
+              <span className="block mt-1">Even With a &quot;Good&quot; Resume</span>
             </h2>
           </motion.div>
 
