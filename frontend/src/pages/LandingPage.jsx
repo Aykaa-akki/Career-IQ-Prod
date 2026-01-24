@@ -900,6 +900,7 @@ const PrimaryCTA = ({ onClick, className = "" }) => (
 export default function LandingPage() {
   const navigate = useNavigate();
   const [showStickyCTA, setShowStickyCTA] = useState(false);
+  const section2Ref = useRef(null);
 
   const handleCTA = () => {
     // Navigate to checkout page - UTM params are already persisted in localStorage
@@ -907,15 +908,22 @@ export default function LandingPage() {
     navigate("/checkout");
   };
 
-  // Show sticky CTA after 25-30% scroll (mobile only)
+  // Show sticky CTA when Section 2 starts (after hero section)
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-      setShowStickyCTA(scrollPercent >= 25);
-    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowStickyCTA(entry.isIntersecting || entry.boundingClientRect.top < 0);
+      },
+      { threshold: 0, rootMargin: '-50px 0px 0px 0px' }
+    );
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Observe section 2
+    const section2 = document.getElementById('section-2-trigger');
+    if (section2) {
+      observer.observe(section2);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -928,17 +936,25 @@ export default function LandingPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
+            className="fixed bottom-4 left-4 right-4 z-50 md:hidden"
           >
-            <div className="bg-[#050508]/95 backdrop-blur-xl border-t border-white/10 px-4 py-3 safe-area-pb">
-              <button
-                onClick={handleCTA}
-                className="w-full py-3 px-6 bg-gradient-to-r from-primary to-cyan-500 hover:from-primary/90 hover:to-cyan-500/90 text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
-              >
-                See Why I'm Being Rejected
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
+            <button
+              onClick={handleCTA}
+              className="w-full py-4 px-6 rounded-2xl font-semibold text-white shadow-2xl transition-all duration-300 active:scale-[0.98] relative overflow-hidden group"
+              style={{
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%)',
+                boxShadow: '0 10px 40px -10px rgba(99, 102, 241, 0.5), 0 4px 20px -5px rgba(6, 182, 212, 0.3)'
+              }}
+            >
+              {/* Animated shine effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              
+              {/* Button content */}
+              <div className="relative flex items-center justify-center gap-2">
+                <span className="text-base tracking-wide">See Why I'm Being Rejected</span>
+                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
