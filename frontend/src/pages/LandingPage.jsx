@@ -1182,7 +1182,7 @@ export default function LandingPage() {
                   icon={<Target className="w-4 h-4" />}
                   headline="Next-Role Clarity"
                   subheadline="Can I clearly see what role this person should move into next?"
-                  text="If your profile doesn't point to one obvious direction, recruiters move on."
+                  text="If your profile doesn&apos;t point to one obvious direction, recruiters move on."
                   delay={0.1}
                 />
                 <SignalItem 
