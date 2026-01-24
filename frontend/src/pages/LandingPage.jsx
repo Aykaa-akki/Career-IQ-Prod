@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Brain, Target, TrendingUp, BookOpen, ShieldAlert, MessageSquare, Sparkles } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
 
