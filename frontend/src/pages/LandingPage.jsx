@@ -1084,7 +1084,7 @@ export default function LandingPage() {
       <section id="signals" className="bg-zinc-50 py-14 md:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            {/* Headline & Subhead - Centered, tighter gap */}
+            {/* Headline & Subhead - Centered */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -1092,80 +1092,104 @@ export default function LandingPage() {
               transition={{ duration: 0.5 }}
               className="text-center mb-10 md:mb-14"
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-zinc-900 mb-3">
-                What Recruiters Evaluate — But Never Explain
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-zinc-900 mb-4">
+                What Recruiters Actually Evaluate
+                <span className="block text-xl sm:text-2xl md:text-3xl text-zinc-600 font-medium mt-1">(But Rarely Explain)</span>
               </h2>
-              <p className="text-zinc-600 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-                Your resume and LinkedIn are just inputs. What decides your outcome is rarely visible to you.
+              <div className="text-zinc-600 text-base md:text-lg max-w-2xl mx-auto leading-relaxed space-y-2">
+                <p>Recruiters don't reject resumes. They reject unclear signals.</p>
+                <p className="text-zinc-500 text-sm md:text-base">
+                  These decisions happen silently — often in under 7 seconds —
+                  <br className="hidden sm:block" />
+                  and no one tells you what failed.
+                </p>
+              </div>
+              <p className="text-zinc-800 font-medium mt-4 text-sm md:text-base">
+                Here's what they're really judging:
               </p>
             </motion.div>
 
             {/* Main Content: Two-column (Desktop) / Single-column (Mobile) */}
             <div className="flex flex-col md:flex-row gap-8 md:gap-14 items-start">
               
-              {/* Visual - Shows first on mobile, right side on desktop */}
+              {/* Visual - Shows only on desktop */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className="w-full md:w-2/5 order-1 md:order-2"
+                className="hidden md:block w-full md:w-2/5 order-1 md:order-2"
               >
                 <FloatingSignalBadges />
               </motion.div>
 
-              {/* Signal Items - Left column on desktop, tighter spacing */}
+              {/* Signal Items - Left column on desktop */}
               <div className="w-full md:w-3/5 order-2 md:order-1 space-y-5 md:space-y-6">
                 <SignalItem 
                   number="1"
-                  headline="You seem qualified — but not obvious"
-                  supporting="You know you can do the role, but your profile doesn't instantly signal it."
+                  icon={<Target className="w-4 h-4" />}
+                  headline="Next-Role Clarity"
+                  supporting={`"Can I clearly see what role this person should move into next?" If your profile doesn't point to one obvious direction, recruiters move on.`}
                   delay={0.1}
                 />
                 <SignalItem 
                   number="2"
-                  headline={`You look "almost ready"`}
-                  supporting="Not a clear yes. Not a clear no. So your application quietly stalls."
+                  icon={<TrendingUp className="w-4 h-4" />}
+                  headline="Promotion Readiness"
+                  supporting={`"Does this person feel ready to move up?" Strong experience still gets rejected if you don't look ready for the next level.`}
                   delay={0.15}
                 />
                 <SignalItem 
                   number="3"
-                  headline="Your experience is strong — but hard to read"
-                  supporting="Too many roles. Too many shifts. Recruiters don't take time to connect the dots."
+                  icon={<BookOpen className="w-4 h-4" />}
+                  headline="Career Narrative"
+                  supporting={`"Does this person's career tell one clear story?" Disconnected roles make it harder to trust the progression.`}
                   delay={0.2}
                 />
                 <SignalItem 
                   number="4"
-                  headline="Something creates hesitation"
-                  supporting="Nothing wrong. Just enough uncertainty to move on."
+                  icon={<ShieldAlert className="w-4 h-4" />}
+                  headline="Shortlisting Risk"
+                  supporting={`"Will shortlisting this person feel risky?" When recruiters feel unsure, they choose safer profiles.`}
                   delay={0.25}
                 />
                 <SignalItem 
                   number="5"
-                  headline="You don't feel like the safest choice"
-                  supporting="When there's doubt, clarity wins over capability."
+                  icon={<MessageSquare className="w-4 h-4" />}
+                  headline="Internal Explainability"
+                  supporting={`"Can I clearly explain this candidate to my manager?" If you can't be described in one sentence, your profile loses momentum.`}
                   delay={0.3}
+                />
+                <SignalItem 
+                  number="6"
+                  icon={<Sparkles className="w-4 h-4" />}
+                  headline="Distinctiveness"
+                  supporting={`"Do they stand out — or sound like everyone else?" Profiles that blend in get ignored, even when they're qualified.`}
+                  delay={0.35}
                 />
               </div>
             </div>
 
-            {/* Bottom Punchline - Impactful text, not a button */}
+            {/* Bottom Punchline */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.35 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
               className="mt-12 md:mt-16 pt-8 border-t border-zinc-200"
             >
-              <p className="text-center">
-                <span className="text-zinc-600 text-xl md:text-2xl font-medium">
-                  You never see these signals.
-                </span>
-                <br />
-                <span className="text-zinc-900 text-2xl md:text-3xl font-bold mt-1 inline-block">
-                  Recruiters do.
-                </span>
-              </p>
+              <div className="text-center space-y-3">
+                <p className="text-zinc-600 text-base md:text-lg">
+                  Most professionals optimize resumes and keywords.
+                  <br />
+                  <span className="text-zinc-800 font-medium">Recruiters decide based on clarity, confidence, and perceived risk.</span>
+                </p>
+                <p className="text-zinc-900 text-lg md:text-xl font-semibold">
+                  Once you see where these signals break down,
+                  <br />
+                  your next move becomes obvious.
+                </p>
+              </div>
             </motion.div>
           </div>
         </div>
