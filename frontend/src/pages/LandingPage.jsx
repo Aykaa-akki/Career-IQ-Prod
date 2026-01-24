@@ -1222,7 +1222,7 @@ export default function LandingPage() {
                   icon={<Sparkles className="w-4 h-4" />}
                   headline="Distinctiveness"
                   subheadline="Do they stand out — or sound like everyone else?"
-                  text="Profiles that blend in get ignored, even when they're qualified."
+                  text="Profiles that blend in get ignored, even when they&apos;re qualified."
                   delay={0.35}
                 />
               </div>
