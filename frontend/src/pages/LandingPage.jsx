@@ -1214,7 +1214,7 @@ export default function LandingPage() {
                   icon={<MessageSquare className="w-4 h-4" />}
                   headline="Internal Explainability"
                   subheadline="Can I clearly explain this candidate to my manager?"
-                  text="If you can't be described in one sentence, your profile loses momentum."
+                  text="If you can&apos;t be described in one sentence, your profile loses momentum."
                   delay={0.3}
                 />
                 <SignalItem 
