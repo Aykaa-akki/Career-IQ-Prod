@@ -1082,7 +1082,7 @@ export default function LandingPage() {
       </section>
 
       {/* ===== SECTION 3: SIGNALS (Pressure Builder) ===== */}
-      <section id="signals" className="bg-zinc-50 py-14 md:py-20">
+      <section id="signals" className="bg-zinc-50 py-14 md:py-20 overflow-x-hidden">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {/* Headline & Subhead - Centered */}
@@ -1125,47 +1125,53 @@ export default function LandingPage() {
               </motion.div>
 
               {/* Signal Items - Left column on desktop */}
-              <div className="w-full md:w-3/5 order-2 md:order-1 space-y-5 md:space-y-6">
+              <div className="w-full md:w-3/5 order-2 md:order-1 space-y-6 md:space-y-7">
                 <SignalItem 
                   number="1"
                   icon={<Target className="w-4 h-4" />}
                   headline="Next-Role Clarity"
-                  supporting={`"Can I clearly see what role this person should move into next?" If your profile doesn't point to one obvious direction, recruiters move on.`}
+                  subheadline="Can I clearly see what role this person should move into next?"
+                  text="If your profile doesn't point to one obvious direction, recruiters move on."
                   delay={0.1}
                 />
                 <SignalItem 
                   number="2"
                   icon={<TrendingUp className="w-4 h-4" />}
                   headline="Promotion Readiness"
-                  supporting={`"Does this person feel ready to move up?" Strong experience still gets rejected if you don't look ready for the next level.`}
+                  subheadline="Does this person feel ready to move up?"
+                  text="Strong experience still gets rejected if you don't look ready for the next level."
                   delay={0.15}
                 />
                 <SignalItem 
                   number="3"
                   icon={<BookOpen className="w-4 h-4" />}
                   headline="Career Narrative"
-                  supporting={`"Does this person's career tell one clear story?" Disconnected roles make it harder to trust the progression.`}
+                  subheadline="Does this person's career tell one clear story?"
+                  text="Disconnected roles make it harder to trust the progression."
                   delay={0.2}
                 />
                 <SignalItem 
                   number="4"
                   icon={<ShieldAlert className="w-4 h-4" />}
                   headline="Shortlisting Risk"
-                  supporting={`"Will shortlisting this person feel risky?" When recruiters feel unsure, they choose safer profiles.`}
+                  subheadline="Will shortlisting this person feel risky?"
+                  text="When recruiters feel unsure, they choose safer profiles."
                   delay={0.25}
                 />
                 <SignalItem 
                   number="5"
                   icon={<MessageSquare className="w-4 h-4" />}
                   headline="Internal Explainability"
-                  supporting={`"Can I clearly explain this candidate to my manager?" If you can't be described in one sentence, your profile loses momentum.`}
+                  subheadline="Can I clearly explain this candidate to my manager?"
+                  text="If you can't be described in one sentence, your profile loses momentum."
                   delay={0.3}
                 />
                 <SignalItem 
                   number="6"
                   icon={<Sparkles className="w-4 h-4" />}
                   headline="Distinctiveness"
-                  supporting={`"Do they stand out — or sound like everyone else?" Profiles that blend in get ignored, even when they're qualified.`}
+                  subheadline="Do they stand out — or sound like everyone else?"
+                  text="Profiles that blend in get ignored, even when they're qualified."
                   delay={0.35}
                 />
               </div>
