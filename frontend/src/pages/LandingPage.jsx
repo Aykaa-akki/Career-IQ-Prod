@@ -971,8 +971,8 @@ export default function LandingPage() {
       </section>
 
       {/* ===== SECTION 2: WHY 80% GET REJECTED (New Section) ===== */}
-      <section className="bg-[#050508] py-16 md:py-20 border-t border-white/5">
-        <div className="max-w-3xl mx-auto px-4">
+      <section className="bg-[#050508] py-14 md:py-20 border-t border-white/5">
+        <div className="max-w-2xl mx-auto px-5 md:px-4">
           {/* Headline */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -981,18 +981,25 @@ export default function LandingPage() {
             transition={{ duration: 0.5 }}
             className="text-center mb-8"
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight mb-4">
-              Know Why <span className="text-red-500">80%</span> Professionals{" "}
-              <span className="text-red-500">Get Rejected</span>
-              <br className="hidden sm:block" />
-              <span className="block sm:inline"> Even With a "Good" Resume Or LinkedIn</span>
+            <h2 className="text-[22px] sm:text-3xl md:text-4xl font-bold leading-snug md:leading-tight">
+              Why <span className="text-red-500">80%</span> of Professionals{" "}
+              <span className="text-red-500">Are Rejected</span>
+              <span className="block mt-1">Even With a "Good" Resume</span>
             </h2>
-            
-            {/* Subheadline */}
-            <p className="text-zinc-400 text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+          </motion.div>
+
+          {/* Subheadline */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="text-center mb-8"
+          >
+            <p className="text-zinc-400 text-[15px] md:text-lg leading-relaxed">
               They're not failing interviews.
               <br />
-              They're being filtered out <em className="not-italic text-white">before</em> interviews even happen.
+              They're being filtered out <span className="text-white">before</span> interviews even happen.
             </p>
           </motion.div>
 
@@ -1004,12 +1011,15 @@ export default function LandingPage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-center mb-10"
           >
-            <p className="text-zinc-500 text-sm md:text-base leading-relaxed max-w-xl mx-auto">
+            <p className="text-zinc-500 text-sm md:text-base leading-relaxed">
               Not because they lack experience.
               <br />
-              Not because their resume or LinkedIn Profile is bad.
+              And not because their resume is bad.
+            </p>
+            <p className="text-zinc-400 text-sm md:text-base leading-relaxed mt-4">
+              But because recruiters make <span className="text-zinc-200">silent decisions</span>
               <br />
-              But because recruiters make <span className="text-zinc-300">silent decisions</span> no one ever explains.
+              no one ever explains.
             </p>
           </motion.div>
 
@@ -1018,27 +1028,27 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
             className="mb-10"
           >
-            <p className="text-zinc-500 text-xs uppercase tracking-wider text-center mb-6">
+            <p className="text-zinc-600 text-xs uppercase tracking-widest text-center mb-5">
               What's actually happening behind the scenes
             </p>
             
-            <div className="grid gap-3 max-w-lg mx-auto">
+            <div className="space-y-2.5">
               {[
-                "Recruiters can't quickly place them at the next level",
-                "Their experience feels strong, but not directional",
-                "Their profile looks safe, not compelling",
-                "Hiring managers hesitate because the risk feels unclear",
-                "They get views — but rarely get shortlisted"
+                "They can't quickly place you at the next level",
+                "Your experience feels strong, but not directional",
+                "Your profile looks safe, not compelling",
+                "They hesitate because the risk feels unclear",
+                "You get views — but rarely get shortlisted"
               ].map((item, index) => (
                 <div 
                   key={index}
-                  className="flex items-start gap-3 bg-white/[0.02] border border-white/5 rounded-lg px-4 py-3"
+                  className="flex items-center gap-3 px-4 py-3 bg-white/[0.02] border border-white/5 rounded-lg"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-red-500/70 mt-2 flex-shrink-0"></span>
-                  <span className="text-zinc-400 text-sm leading-relaxed">{item}</span>
+                  <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0"></span>
+                  <span className="text-zinc-400 text-sm">{item}</span>
                 </div>
               ))}
             </div>
@@ -1049,18 +1059,18 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             className="text-center"
           >
-            <p className="text-zinc-500 text-sm md:text-base leading-relaxed max-w-lg mx-auto mb-6">
-              These judgments happen quietly, often in seconds.
+            <p className="text-zinc-500 text-sm md:text-base leading-relaxed mb-5">
+              These judgments happen quietly — often in seconds.
               <br />
               And once they're made, the application is already over.
             </p>
             
             {/* Transition Line */}
-            <p className="text-zinc-300 text-sm md:text-base font-medium">
-              Before you apply again, you need to understand what recruiters actually judge — and why this keeps happening.
+            <p className="text-zinc-200 text-sm md:text-base font-medium">
+              To stop this, you need to see what recruiters actually judge.
             </p>
           </motion.div>
         </div>
