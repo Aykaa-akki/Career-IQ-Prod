@@ -353,7 +353,7 @@ const FloatingSignalBadges = () => {
 };
 
 // Signal Item Component for Section 2
-const SignalItem = ({ number, icon, headline, supporting, delay = 0 }) => (
+const SignalItem = ({ number, icon, headline, subheadline, text, delay = 0 }) => (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -367,8 +367,9 @@ const SignalItem = ({ number, icon, headline, supporting, delay = 0 }) => (
       <span className="md:hidden text-zinc-500">{icon}</span>
     </div>
     <div>
-      <p className="text-zinc-800 font-semibold mb-1 leading-snug">{headline}</p>
-      <p className="text-zinc-500 text-sm leading-relaxed">{supporting}</p>
+      <p className="text-zinc-800 font-semibold leading-snug">{headline}</p>
+      <p className="text-zinc-700 font-medium text-sm mt-1">{subheadline}</p>
+      <p className="text-zinc-500 text-sm leading-relaxed mt-1">{text}</p>
     </div>
   </motion.div>
 );
