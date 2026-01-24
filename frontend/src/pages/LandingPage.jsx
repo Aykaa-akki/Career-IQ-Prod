@@ -951,7 +951,7 @@ export default function LandingPage() {
               
               {/* Button content */}
               <div className="relative flex items-center justify-center gap-2">
-                <span className="text-base tracking-wide">See Why I'm Being Rejected</span>
+                <span className="text-base tracking-wide">See Why I&apos;m Being Rejected</span>
                 <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </div>
             </button>
