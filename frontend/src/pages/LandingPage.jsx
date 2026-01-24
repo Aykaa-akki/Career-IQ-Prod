@@ -1093,7 +1093,7 @@ export default function LandingPage() {
             
             <div className="space-y-2.5">
               {[
-                "They can't quickly place you at the next level",
+                "They can&apos;t quickly place you at the next level",
                 "Your experience feels strong, but not directional",
                 "Your profile looks safe, not compelling",
                 "They hesitate because the risk feels unclear",
