@@ -1088,7 +1088,7 @@ export default function LandingPage() {
             className="mb-10"
           >
             <p className="text-zinc-600 text-xs uppercase tracking-widest text-center mb-5">
-              What's actually happening behind the scenes
+              What&apos;s actually happening behind the scenes
             </p>
             
             <div className="space-y-2.5">
