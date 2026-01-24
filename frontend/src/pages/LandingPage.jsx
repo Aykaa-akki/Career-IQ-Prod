@@ -1197,7 +1197,7 @@ export default function LandingPage() {
                   number="3"
                   icon={<BookOpen className="w-4 h-4" />}
                   headline="Career Narrative"
-                  subheadline="Does this person's career tell one clear story?"
+                  subheadline="Does this person&apos;s career tell one clear story?"
                   text="Disconnected roles make it harder to trust the progression."
                   delay={0.2}
                 />
