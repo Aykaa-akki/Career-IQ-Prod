@@ -1554,7 +1554,7 @@ export default function LandingPage() {
             </div>
             
             {/* System Processing Card - Contains both analysis steps */}
-            <div className="relative bg-gradient-to-br from-primary/[0.04] to-cyan-500/[0.04] border border-primary/20 rounded-xl p-4 md:p-6 overflow-hidden">
+            <div className="relative bg-gradient-to-br from-primary/[0.04] to-cyan-500/[0.04] border border-primary/20 rounded-xl p-4 md:p-6 pt-12 md:pt-6 overflow-hidden">
               {/* Subtle animated background pattern */}
               <div className="absolute inset-0 opacity-30">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
