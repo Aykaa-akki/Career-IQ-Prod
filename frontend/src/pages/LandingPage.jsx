@@ -1027,7 +1027,7 @@ export default function LandingPage() {
       </section>
 
       {/* ===== SECTION 2: WHY 80% GET REJECTED (New Section) ===== */}
-      <section className="bg-[#050508] py-14 md:py-20 border-t border-white/5">
+      <section id="section-2-trigger" className="bg-[#050508] py-14 md:py-20 border-t border-white/5">
         <div className="max-w-2xl mx-auto px-5 md:px-4">
           {/* Headline */}
           <motion.div
