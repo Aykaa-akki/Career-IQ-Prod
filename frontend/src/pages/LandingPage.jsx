@@ -907,7 +907,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050508] text-white">
+    <div className="min-h-screen bg-[#050508] text-white overflow-x-hidden">
       {/* Fixed Header - Same as Order Page */}
       <header className="border-b border-white/5 bg-[#050508]/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
