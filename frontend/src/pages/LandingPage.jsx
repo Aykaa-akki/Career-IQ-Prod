@@ -1121,7 +1121,7 @@ export default function LandingPage() {
             <p className="text-zinc-500 text-sm md:text-base leading-relaxed mb-5">
               These judgments happen quietly — often in seconds.
               <br />
-              And once they're made, the application is already over.
+              And once they&apos;re made, the application is already over.
             </p>
             
             {/* Transition Line */}
