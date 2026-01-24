@@ -1396,7 +1396,7 @@ export default function LandingPage() {
                   },
                   {
                     title: "Role Mismatch",
-                    description: "Where your experience doesn't line up with what the role expects."
+                    description: "Where your experience doesn&apos;t line up with what the role expects."
                   },
                   {
                     title: "Execution Guardrails",
