@@ -899,6 +899,7 @@ const PrimaryCTA = ({ onClick, className = "" }) => (
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const [showStickyCTA, setShowStickyCTA] = useState(false);
 
   const handleCTA = () => {
     // Navigate to checkout page - UTM params are already persisted in localStorage
@@ -906,8 +907,42 @@ export default function LandingPage() {
     navigate("/checkout");
   };
 
+  // Show sticky CTA after 25-30% scroll (mobile only)
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      setShowStickyCTA(scrollPercent >= 25);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#050508] text-white overflow-x-hidden">
+      {/* Sticky CTA - Mobile Only */}
+      <AnimatePresence>
+        {showStickyCTA && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
+          >
+            <div className="bg-[#050508]/95 backdrop-blur-xl border-t border-white/10 px-4 py-3 safe-area-pb">
+              <button
+                onClick={handleCTA}
+                className="w-full py-3 px-6 bg-gradient-to-r from-primary to-cyan-500 hover:from-primary/90 hover:to-cyan-500/90 text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
+              >
+                See Why I'm Being Rejected
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Fixed Header - Same as Order Page */}
       <header className="border-b border-white/5 bg-[#050508]/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
