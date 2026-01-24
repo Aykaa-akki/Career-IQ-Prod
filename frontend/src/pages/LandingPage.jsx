@@ -1190,7 +1190,7 @@ export default function LandingPage() {
                   icon={<TrendingUp className="w-4 h-4" />}
                   headline="Promotion Readiness"
                   subheadline="Does this person feel ready to move up?"
-                  text="Strong experience still gets rejected if you don't look ready for the next level."
+                  text="Strong experience still gets rejected if you don&apos;t look ready for the next level."
                   delay={0.15}
                 />
                 <SignalItem 
