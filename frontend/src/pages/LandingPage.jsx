@@ -1053,9 +1053,9 @@ export default function LandingPage() {
             className="text-center mb-8"
           >
             <p className="text-zinc-400 text-[15px] md:text-lg leading-relaxed">
-              They're not failing interviews.
+              They&apos;re not failing interviews.
               <br />
-              They're being filtered out <span className="text-white">before</span> interviews even happen.
+              They&apos;re being filtered out <span className="text-white">before</span> interviews even happen.
             </p>
           </motion.div>
 
