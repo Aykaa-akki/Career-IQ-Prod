@@ -9,7 +9,7 @@ import io
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://resume-insights-16.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://talent-match-147.preview.emergentagent.com')
 
 
 def create_test_pdf(content_type="resume"):

@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 
 class CareerIQComprehensiveTest:
-    def __init__(self, base_url="https://resume-insights-16.preview.emergentagent.com"):
+    def __init__(self, base_url="https://talent-match-147.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0

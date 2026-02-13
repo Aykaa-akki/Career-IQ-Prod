@@ -6,7 +6,7 @@ from datetime import datetime
 from fpdf import FPDF
 
 class LLMAnalysisTest:
-    def __init__(self, base_url="https://resume-insights-16.preview.emergentagent.com"):
+    def __init__(self, base_url="https://talent-match-147.preview.emergentagent.com"):
         self.base_url = base_url
         self.session_id = None
         self.tests_run = 0
