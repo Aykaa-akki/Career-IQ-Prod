@@ -1,6 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 import {
   Upload,
   FileText,
@@ -16,7 +18,9 @@ import {
   Loader2,
   Lock,
   Shield,
-  ChevronRight
+  ChevronRight,
+  ChevronLeft,
+  Quote
 } from "lucide-react";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
