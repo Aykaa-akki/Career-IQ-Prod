@@ -31,6 +31,52 @@ import { getUTMParams } from "../utils/utm";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
+// Testimonial images data
+const TESTIMONIALS = [
+  {
+    id: 1,
+    image: "https://customer-assets.emergentagent.com/job_resume-insights-16/artifacts/wrn56f0g_Rate-1.png",
+    name: "Mrinal Malhotra",
+    role: "Project Manager",
+    headline: "Finally understood what was going wrong"
+  },
+  {
+    id: 2,
+    image: "https://customer-assets.emergentagent.com/job_resume-insights-16/artifacts/2hpb2ws4_Rate-2.png",
+    name: "Sonali Thankur",
+    role: "People Management",
+    headline: "Very practical and eye-opening"
+  },
+  {
+    id: 3,
+    image: "https://customer-assets.emergentagent.com/job_b39b39f8-2e91-41dc-8598-4d024ce6b296/artifacts/de3dfszi_Rate-3.png",
+    name: "Rhoit Sharma",
+    role: "Marketing Head",
+    headline: "Helped me stop overthinking"
+  },
+  {
+    id: 4,
+    image: "https://customer-assets.emergentagent.com/job_resume-insights-16/artifacts/7e0zsako_WA-1.png",
+    name: "WhatsApp Feedback",
+    role: "Career-IQ User",
+    headline: "Real user conversation"
+  },
+  {
+    id: 5,
+    image: "https://customer-assets.emergentagent.com/job_resume-insights-16/artifacts/hmzfei7c_WA-2.png",
+    name: "WhatsApp Feedback",
+    role: "Career-IQ User",
+    headline: "Real user conversation"
+  },
+  {
+    id: 6,
+    image: "https://customer-assets.emergentagent.com/job_resume-insights-16/artifacts/ox74b1o8_WA-3.png",
+    name: "WhatsApp Feedback",
+    role: "Career-IQ User",
+    headline: "Real user conversation"
+  }
+];
+
 // Country codes for selector
 const COUNTRY_CODES = [
   { code: "+91", country: "IN", flag: "🇮🇳" },
