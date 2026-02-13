@@ -653,6 +653,9 @@ export default function OrderPage() {
                 </ul>
               </div>
 
+              {/* Testimonials Carousel */}
+              <TestimonialCarousel />
+
               {/* Secure & Confidential */}
               <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-5">
                 <div className="flex items-center gap-3 mb-2">
