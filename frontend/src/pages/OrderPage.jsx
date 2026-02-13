@@ -91,6 +91,109 @@ const COUNTRY_CODES = [
   { code: "+86", country: "CN", flag: "🇨🇳" },
 ];
 
+// Testimonial Carousel Component
+function TestimonialCarousel() {
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { 
+      loop: true,
+      align: 'center',
+      skipSnaps: false,
+    },
+    [Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })]
+  );
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on('select', onSelect);
+    onSelect();
+  }, [emblaApi, onSelect]);
+
+  return (
+    <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-5 md:p-6" data-testid="testimonial-carousel">
+      {/* Section Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <Quote className="w-4 h-4 text-primary" />
+          <h3 className="font-bold text-white">What Users Say</h3>
+        </div>
+        {/* Navigation Arrows - Desktop only */}
+        <div className="hidden sm:flex items-center gap-2">
+          <button
+            onClick={scrollPrev}
+            className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors"
+            aria-label="Previous testimonial"
+          >
+            <ChevronLeft className="w-4 h-4 text-zinc-400" />
+          </button>
+          <button
+            onClick={scrollNext}
+            className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors"
+            aria-label="Next testimonial"
+          >
+            <ChevronRight className="w-4 h-4 text-zinc-400" />
+          </button>
+        </div>
+      </div>
+
+      {/* Carousel Container */}
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex touch-pan-y">
+          {TESTIMONIALS.map((testimonial) => (
+            <div
+              key={testimonial.id}
+              className="flex-[0_0_100%] min-w-0 px-1"
+            >
+              <div className="relative rounded-xl overflow-hidden bg-white/5">
+                <img
+                  src={testimonial.image}
+                  alt={`Testimonial from ${testimonial.name}`}
+                  className="w-full h-auto object-contain rounded-xl"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Dot Indicators */}
+      <div className="flex justify-center gap-2 mt-4">
+        {TESTIMONIALS.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => emblaApi?.scrollTo(index)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              index === selectedIndex
+                ? 'bg-primary w-6'
+                : 'bg-white/20 hover:bg-white/40'
+            }`}
+            aria-label={`Go to testimonial ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Swipe hint on mobile */}
+      <p className="text-center text-zinc-500 text-xs mt-3 sm:hidden">
+        Swipe to see more reviews
+      </p>
+    </div>
+  );
+}
+
 export default function OrderPage() {
   const navigate = useNavigate();
   
