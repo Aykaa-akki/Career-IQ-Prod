@@ -331,7 +331,8 @@ export default function OrderPage() {
       setUploadStatus('idle');
       setUploadedSessionId(null);
     }
-  }, [resumeFile, linkedinFile, targetRole]); // Reset when these change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resumeFile, linkedinFile, targetRole]); // Reset when these change, intentionally excluding uploadStatus
 
   const handleFileDrop = useCallback((e, type) => {
     e.preventDefault();
