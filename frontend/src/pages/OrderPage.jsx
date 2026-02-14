@@ -218,6 +218,7 @@ export default function OrderPage() {
   const [uploadedSessionId, setUploadedSessionId] = useState(null);
   const [uploadError, setUploadError] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadingFile, setUploadingFile] = useState(null); // Track which file triggered the upload: 'resume' | 'linkedin' | null
 
   // Preload Razorpay script on page load for faster checkout
   const preloadRazorpayScript = useCallback(() => {
