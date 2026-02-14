@@ -753,7 +753,9 @@ export default function OrderPage() {
                   </Label>
                   <div 
                     className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-all ${
-                      linkedinFile 
+                      uploadStatus === 'uploading' && uploadingFile === 'linkedin'
+                        ? 'border-primary/50 bg-primary/10'
+                        : linkedinFile 
                         ? 'border-emerald-500/50 bg-emerald-500/10' 
                         : 'border-white/20 bg-white/5 hover:border-primary/50 hover:bg-white/[0.07]'
                     }`}
@@ -770,15 +772,38 @@ export default function OrderPage() {
                       data-testid="linkedin-upload-input"
                     />
                     {linkedinFile ? (
-                      <div className="flex items-center justify-center gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                        <span className="text-white text-sm font-medium">{linkedinFile.name}</span>
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setLinkedinFile(null); }}
-                          className="p-1 hover:bg-white/10 rounded-full"
-                        >
-                          <X className="w-4 h-4 text-zinc-400" />
-                        </button>
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="flex items-center justify-center gap-3">
+                          {uploadStatus === 'uploading' && uploadingFile === 'linkedin' ? (
+                            <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                          ) : (
+                            <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                          )}
+                          <span className="text-white text-sm font-medium">{linkedinFile.name}</span>
+                          <button 
+                            onClick={(e) => { 
+                              e.stopPropagation(); 
+                              handleRemoveFile('linkedin');
+                            }}
+                            className="p-1 hover:bg-white/10 rounded-full"
+                          >
+                            <X className="w-4 h-4 text-zinc-400" />
+                          </button>
+                        </div>
+                        {/* Upload Progress Bar - only show for linkedin */}
+                        {uploadStatus === 'uploading' && uploadingFile === 'linkedin' && (
+                          <div className="w-full max-w-xs">
+                            <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                              <motion.div 
+                                className="h-full bg-primary"
+                                initial={{ width: 0 }}
+                                animate={{ width: `${uploadProgress}%` }}
+                                transition={{ duration: 0.3 }}
+                              />
+                            </div>
+                            <p className="text-xs text-zinc-400 mt-1">Validating LinkedIn profile...</p>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div className="py-2">
