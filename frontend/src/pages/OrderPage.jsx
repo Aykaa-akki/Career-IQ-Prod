@@ -211,11 +211,30 @@ export default function OrderPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [consentError, setConsentError] = useState(false);
   const [razorpayKey, setRazorpayKey] = useState(null);
+  const [razorpayReady, setRazorpayReady] = useState(false);
+
+  // Preload Razorpay script on page load for faster checkout
+  const preloadRazorpayScript = useCallback(() => {
+    if (window.Razorpay) {
+      setRazorpayReady(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => setRazorpayReady(true);
+    script.onerror = () => console.error("Failed to load Razorpay script");
+    document.body.appendChild(script);
+  }, []);
 
   useEffect(() => {
     // Scroll to top on mount
     window.scrollTo(0, 0);
     
+    // Preload Razorpay script immediately for faster checkout
+    preloadRazorpayScript();
+    
+    // Fetch Razorpay key
     const fetchKey = async () => {
       try {
         const res = await axios.get(`${API_URL}/api/razorpay-key`);
@@ -225,7 +244,7 @@ export default function OrderPage() {
       }
     };
     fetchKey();
-  }, []);
+  }, [preloadRazorpayScript]);
 
   const handleFileDrop = useCallback((e, type) => {
     e.preventDefault();
