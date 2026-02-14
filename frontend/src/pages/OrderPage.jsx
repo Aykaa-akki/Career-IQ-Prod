@@ -260,7 +260,7 @@ export default function OrderPage() {
   }, []);
 
   // NEW: Background upload function - uploads files immediately when ready
-  const uploadFilesInBackground = useCallback(async (resume, linkedin, role, phone, code) => {
+  const uploadFilesInBackground = useCallback(async (resume, linkedin, role, phone, code, triggerFile = 'resume') => {
     if (!resume || !role.trim() || !phone.trim() || phone.replace(/\D/g, '').length < 10) {
       return; // Don't upload until all required fields are filled
     }
@@ -270,6 +270,7 @@ export default function OrderPage() {
     setUploadError(null);
     setUploadedSessionId(null);
     setUploadProgress(10);
+    setUploadingFile(triggerFile); // Track which file triggered the upload
 
     const utmParams = getUTMParams();
     const formData = new FormData();
@@ -301,12 +302,14 @@ export default function OrderPage() {
       setUploadProgress(100);
       setUploadedSessionId(uploadRes.data.session_id);
       setUploadStatus('uploaded');
+      setUploadingFile(null);
       
     } catch (err) {
       const errorMessage = err.response?.data?.detail || "Failed to process your files. Please try again.";
       setUploadError(errorMessage);
       setUploadStatus('error');
       setUploadProgress(0);
+      setUploadingFile(null);
     }
   }, [formatE164]);
 
