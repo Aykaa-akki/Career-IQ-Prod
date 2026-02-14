@@ -321,13 +321,15 @@ export default function OrderPage() {
       const timeoutId = setTimeout(() => {
         // Only upload if not already uploaded or there was an error
         if (uploadStatus === 'idle' || uploadStatus === 'error') {
-          uploadFilesInBackground(resumeFile, linkedinFile, targetRole, phoneNumber, countryCode);
+          // Determine which file triggered this upload
+          const trigger = uploadingFile || 'resume';
+          uploadFilesInBackground(resumeFile, linkedinFile, targetRole, phoneNumber, countryCode, trigger);
         }
       }, 500);
       
       return () => clearTimeout(timeoutId);
     }
-  }, [resumeFile, linkedinFile, targetRole, phoneNumber, countryCode, uploadStatus, uploadFilesInBackground]);
+  }, [resumeFile, linkedinFile, targetRole, phoneNumber, countryCode, uploadStatus, uploadFilesInBackground, uploadingFile]);
 
   // NEW: Reset upload status when files change
   useEffect(() => {
