@@ -338,6 +338,14 @@ export default function OrderPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resumeFile, linkedinFile, targetRole]); // Reset when these change, intentionally excluding uploadStatus
 
+  // Helper function to clear file input
+  const clearFileInput = useCallback((inputId) => {
+    const input = document.getElementById(inputId);
+    if (input) {
+      input.value = '';
+    }
+  }, []);
+
   const handleFileDrop = useCallback((e, type) => {
     e.preventDefault();
     e.stopPropagation();
@@ -360,6 +368,7 @@ export default function OrderPage() {
     setUploadStatus('idle');
     setUploadedSessionId(null);
     setUploadError(null);
+    setUploadingFile(type); // Track which file is being uploaded
     
     if (type === 'resume') {
       setResumeFile(file);
@@ -367,6 +376,22 @@ export default function OrderPage() {
       setLinkedinFile(file);
     }
   }, []);
+
+  // Handle file removal
+  const handleRemoveFile = useCallback((type) => {
+    if (type === 'resume') {
+      setResumeFile(null);
+      clearFileInput('resume-input');
+    } else {
+      setLinkedinFile(null);
+      clearFileInput('linkedin-input');
+    }
+    // Reset upload state
+    setUploadStatus('idle');
+    setUploadedSessionId(null);
+    setUploadError(null);
+    setUploadingFile(null);
+  }, [clearFileInput]);
 
   const handleSubmit = async () => {
     // Validation
