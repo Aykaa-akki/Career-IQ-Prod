@@ -358,10 +358,26 @@ export default function OrderPage() {
 
       const { order_id, amount, currency } = orderRes.data;
 
-      // Step 3: Load Razorpay
-      const loaded = await loadRazorpayScript();
-      if (!loaded) {
-        throw new Error("Payment system failed to load. Please refresh and try again.");
+      // Step 3: Check if Razorpay is ready (should be preloaded)
+      if (!window.Razorpay) {
+        // Fallback: wait for script if not yet loaded
+        await new Promise((resolve) => {
+          const checkInterval = setInterval(() => {
+            if (window.Razorpay) {
+              clearInterval(checkInterval);
+              resolve(true);
+            }
+          }, 100);
+          // Timeout after 5 seconds
+          setTimeout(() => {
+            clearInterval(checkInterval);
+            resolve(false);
+          }, 5000);
+        });
+        
+        if (!window.Razorpay) {
+          throw new Error("Payment system failed to load. Please refresh and try again.");
+        }
       }
 
       const options = {
