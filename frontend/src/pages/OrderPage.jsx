@@ -695,7 +695,7 @@ export default function OrderPage() {
                     {resumeFile ? (
                       <div className="flex flex-col items-center gap-2">
                         <div className="flex items-center justify-center gap-3">
-                          {uploadStatus === 'uploading' ? (
+                          {uploadStatus === 'uploading' && uploadingFile === 'resume' ? (
                             <Loader2 className="w-5 h-5 text-primary animate-spin" />
                           ) : uploadStatus === 'uploaded' ? (
                             <CheckCircle2 className="w-5 h-5 text-emerald-500" />
@@ -708,18 +708,15 @@ export default function OrderPage() {
                           <button 
                             onClick={(e) => { 
                               e.stopPropagation(); 
-                              setResumeFile(null); 
-                              setUploadStatus('idle');
-                              setUploadedSessionId(null);
-                              setUploadError(null);
+                              handleRemoveFile('resume');
                             }}
                             className="p-1 hover:bg-white/10 rounded-full"
                           >
                             <X className="w-4 h-4 text-zinc-400" />
                           </button>
                         </div>
-                        {/* Upload Progress Bar */}
-                        {uploadStatus === 'uploading' && (
+                        {/* Upload Progress Bar - only show for resume */}
+                        {uploadStatus === 'uploading' && uploadingFile === 'resume' && (
                           <div className="w-full max-w-xs">
                             <div className="h-1 bg-white/10 rounded-full overflow-hidden">
                               <motion.div 
@@ -733,7 +730,7 @@ export default function OrderPage() {
                           </div>
                         )}
                         {uploadStatus === 'uploaded' && (
-                          <p className="text-xs text-emerald-400">✓ Resume validated and ready</p>
+                          <p className="text-xs text-emerald-400">✓ Files validated and ready</p>
                         )}
                         {uploadStatus === 'error' && (
                           <p className="text-xs text-red-400">{uploadError}</p>
