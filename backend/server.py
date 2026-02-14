@@ -1759,3 +1759,26 @@ app.add_middleware(
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+
+# Keep-alive background task to prevent Railway cold starts
+async def keep_alive_task():
+    """
+    Ping the health endpoint every 60 seconds to prevent Railway from putting the service to sleep.
+    This eliminates cold start delays for users.
+    """
+    await asyncio.sleep(30)  # Wait 30s after startup before starting pings
+    while True:
+        try:
+            async with httpx.AsyncClient() as client:
+                # Self-ping to keep the service warm
+                await client.get("http://localhost:8080/api/health", timeout=10.0)
+                logger.debug("Keep-alive ping successful")
+        except Exception as e:
+            logger.debug(f"Keep-alive ping failed (non-critical): {e}")
+        await asyncio.sleep(60)  # Ping every 60 seconds
+
+@app.on_event("startup")
+async def start_keep_alive():
+    """Start the keep-alive background task on server startup."""
+    asyncio.create_task(keep_alive_task())
+    logger.info("Keep-alive task started - cold starts prevention enabled")
