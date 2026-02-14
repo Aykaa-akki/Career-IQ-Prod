@@ -385,8 +385,13 @@ export default function OrderPage() {
       return;
     }
 
+    // Check if there was an upload error
+    if (uploadStatus === 'error') {
+      toast.error(uploadError || "There was an issue with your files. Please re-upload.");
+      return;
+    }
+
     // Meta Tracking: Push dataLayer event for AddToCart tracking
-    // This fires BEFORE payment flow starts (for GTM → Meta AddToCart)
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
       event: 'careerIQ_payment_cta_click'
@@ -394,45 +399,46 @@ export default function OrderPage() {
 
     setIsProcessing(true);
 
-    // Get UTM parameters for attribution tracking
     const utmParams = getUTMParams();
 
     try {
-      // Step 1: Upload files
-      const formData = new FormData();
-      formData.append('resume', resumeFile);
-      formData.append('target_role', targetRole.trim());
-      formData.append('mobile_number', formatE164(countryCode, phoneNumber));
-      
-      if (linkedinFile) {
-        formData.append('linkedin', linkedinFile);
+      let sessionId = uploadedSessionId;
+
+      // If files not yet uploaded (rare case), upload now
+      if (uploadStatus !== 'uploaded' || !sessionId) {
+        const formData = new FormData();
+        formData.append('resume', resumeFile);
+        formData.append('target_role', targetRole.trim());
+        formData.append('mobile_number', formatE164(countryCode, phoneNumber));
+        
+        if (linkedinFile) {
+          formData.append('linkedin', linkedinFile);
+        }
+
+        if (utmParams.utm_source) formData.append('utm_source', utmParams.utm_source);
+        if (utmParams.utm_medium) formData.append('utm_medium', utmParams.utm_medium);
+        if (utmParams.utm_campaign) formData.append('utm_campaign', utmParams.utm_campaign);
+        if (utmParams.utm_adset) formData.append('utm_adset', utmParams.utm_adset);
+        if (utmParams.utm_adcreative) formData.append('utm_adcreative', utmParams.utm_adcreative);
+
+        const uploadRes = await axios.post(`${API_URL}/api/upload`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        sessionId = uploadRes.data.session_id;
       }
 
-      // Append UTM params to form data
-      if (utmParams.utm_source) formData.append('utm_source', utmParams.utm_source);
-      if (utmParams.utm_medium) formData.append('utm_medium', utmParams.utm_medium);
-      if (utmParams.utm_campaign) formData.append('utm_campaign', utmParams.utm_campaign);
-      if (utmParams.utm_adset) formData.append('utm_adset', utmParams.utm_adset);
-      if (utmParams.utm_adcreative) formData.append('utm_adcreative', utmParams.utm_adcreative);
-
-      const uploadRes = await axios.post(`${API_URL}/api/upload`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-
-      const sessionId = uploadRes.data.session_id;
-
-      // Step 2: Create Razorpay order (fixed ₹2999)
+      // ⚡ FAST PATH: Files already uploaded, just create order
       const orderRes = await axios.post(`${API_URL}/api/create-order`, {
         tier: 2999,
         session_id: sessionId,
-        ...utmParams // Include UTM params in order creation
+        ...utmParams
       });
 
       const { order_id, amount, currency } = orderRes.data;
 
-      // Step 3: Check if Razorpay is ready (should be preloaded)
+      // Check if Razorpay is ready (should be preloaded)
       if (!window.Razorpay) {
-        // Fallback: wait for script if not yet loaded
         await new Promise((resolve) => {
           const checkInterval = setInterval(() => {
             if (window.Razorpay) {
@@ -440,7 +446,6 @@ export default function OrderPage() {
               resolve(true);
             }
           }, 100);
-          // Timeout after 5 seconds
           setTimeout(() => {
             clearInterval(checkInterval);
             resolve(false);
@@ -466,7 +471,7 @@ export default function OrderPage() {
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
               session_id: sessionId,
-              ...utmParams // Include UTM params in payment verification
+              ...utmParams
             });
 
             await axios.post(`${API_URL}/api/analyze`, {
