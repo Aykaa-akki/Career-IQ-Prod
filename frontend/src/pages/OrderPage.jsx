@@ -212,6 +212,12 @@ export default function OrderPage() {
   const [consentError, setConsentError] = useState(false);
   const [razorpayKey, setRazorpayKey] = useState(null);
   const [razorpayReady, setRazorpayReady] = useState(false);
+  
+  // NEW: Background upload state for instant checkout
+  const [uploadStatus, setUploadStatus] = useState('idle'); // 'idle' | 'uploading' | 'uploaded' | 'error'
+  const [uploadedSessionId, setUploadedSessionId] = useState(null);
+  const [uploadError, setUploadError] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   // Preload Razorpay script on page load for faster checkout
   const preloadRazorpayScript = useCallback(() => {
@@ -246,6 +252,87 @@ export default function OrderPage() {
     fetchKey();
   }, [preloadRazorpayScript]);
 
+  // Format phone to E.164
+  const formatE164 = useCallback((code, number) => {
+    const cleanNumber = number.replace(/\D/g, '');
+    return `${code}${cleanNumber}`;
+  }, []);
+
+  // NEW: Background upload function - uploads files immediately when ready
+  const uploadFilesInBackground = useCallback(async (resume, linkedin, role, phone, code) => {
+    if (!resume || !role.trim() || !phone.trim() || phone.replace(/\D/g, '').length < 10) {
+      return; // Don't upload until all required fields are filled
+    }
+
+    // Reset previous upload state
+    setUploadStatus('uploading');
+    setUploadError(null);
+    setUploadedSessionId(null);
+    setUploadProgress(10);
+
+    const utmParams = getUTMParams();
+    const formData = new FormData();
+    formData.append('resume', resume);
+    formData.append('target_role', role.trim());
+    formData.append('mobile_number', formatE164(code, phone));
+    
+    if (linkedin) {
+      formData.append('linkedin', linkedin);
+    }
+
+    // Append UTM params
+    if (utmParams.utm_source) formData.append('utm_source', utmParams.utm_source);
+    if (utmParams.utm_medium) formData.append('utm_medium', utmParams.utm_medium);
+    if (utmParams.utm_campaign) formData.append('utm_campaign', utmParams.utm_campaign);
+    if (utmParams.utm_adset) formData.append('utm_adset', utmParams.utm_adset);
+    if (utmParams.utm_adcreative) formData.append('utm_adcreative', utmParams.utm_adcreative);
+
+    try {
+      setUploadProgress(30);
+      const uploadRes = await axios.post(`${API_URL}/api/upload`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (progressEvent) => {
+          const progress = Math.round((progressEvent.loaded * 60) / progressEvent.total) + 30;
+          setUploadProgress(Math.min(progress, 90));
+        }
+      });
+
+      setUploadProgress(100);
+      setUploadedSessionId(uploadRes.data.session_id);
+      setUploadStatus('uploaded');
+      
+    } catch (err) {
+      const errorMessage = err.response?.data?.detail || "Failed to process your files. Please try again.";
+      setUploadError(errorMessage);
+      setUploadStatus('error');
+      setUploadProgress(0);
+    }
+  }, [formatE164]);
+
+  // NEW: Trigger background upload when all required fields are filled
+  useEffect(() => {
+    // Only trigger if we have resume, target role, and valid phone
+    if (resumeFile && targetRole.trim() && phoneNumber.trim() && phoneNumber.replace(/\D/g, '').length >= 10) {
+      // Debounce to avoid multiple uploads while user is still typing
+      const timeoutId = setTimeout(() => {
+        // Only upload if not already uploaded or there was an error
+        if (uploadStatus === 'idle' || uploadStatus === 'error') {
+          uploadFilesInBackground(resumeFile, linkedinFile, targetRole, phoneNumber, countryCode);
+        }
+      }, 500);
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [resumeFile, linkedinFile, targetRole, phoneNumber, countryCode, uploadStatus, uploadFilesInBackground]);
+
+  // NEW: Reset upload status when files change
+  useEffect(() => {
+    if (uploadStatus === 'uploaded') {
+      setUploadStatus('idle');
+      setUploadedSessionId(null);
+    }
+  }, [resumeFile, linkedinFile, targetRole]); // Reset when these change
+
   const handleFileDrop = useCallback((e, type) => {
     e.preventDefault();
     e.stopPropagation();
@@ -264,18 +351,17 @@ export default function OrderPage() {
       return;
     }
     
+    // Reset upload status when new file is selected
+    setUploadStatus('idle');
+    setUploadedSessionId(null);
+    setUploadError(null);
+    
     if (type === 'resume') {
       setResumeFile(file);
     } else {
       setLinkedinFile(file);
     }
   }, []);
-
-  // Format phone to E.164
-  const formatE164 = (code, number) => {
-    const cleanNumber = number.replace(/\D/g, '');
-    return `${code}${cleanNumber}`;
-  };
 
   const handleSubmit = async () => {
     // Validation
