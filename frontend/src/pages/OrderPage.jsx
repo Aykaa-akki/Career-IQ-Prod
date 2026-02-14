@@ -640,8 +640,12 @@ export default function OrderPage() {
                   </Label>
                   <div 
                     className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-all ${
-                      resumeFile 
-                        ? 'border-emerald-500/50 bg-emerald-500/10' 
+                      uploadStatus === 'error' 
+                        ? 'border-red-500/50 bg-red-500/10'
+                        : uploadStatus === 'uploaded'
+                        ? 'border-emerald-500/50 bg-emerald-500/10'
+                        : resumeFile 
+                        ? 'border-primary/50 bg-primary/10' 
                         : 'border-white/20 bg-white/5 hover:border-primary/50 hover:bg-white/[0.07]'
                     }`}
                     onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
@@ -657,15 +661,51 @@ export default function OrderPage() {
                       data-testid="resume-upload-input"
                     />
                     {resumeFile ? (
-                      <div className="flex items-center justify-center gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                        <span className="text-white text-sm font-medium">{resumeFile.name}</span>
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setResumeFile(null); }}
-                          className="p-1 hover:bg-white/10 rounded-full"
-                        >
-                          <X className="w-4 h-4 text-zinc-400" />
-                        </button>
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="flex items-center justify-center gap-3">
+                          {uploadStatus === 'uploading' ? (
+                            <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                          ) : uploadStatus === 'uploaded' ? (
+                            <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                          ) : uploadStatus === 'error' ? (
+                            <AlertCircle className="w-5 h-5 text-red-500" />
+                          ) : (
+                            <FileText className="w-5 h-5 text-primary" />
+                          )}
+                          <span className="text-white text-sm font-medium">{resumeFile.name}</span>
+                          <button 
+                            onClick={(e) => { 
+                              e.stopPropagation(); 
+                              setResumeFile(null); 
+                              setUploadStatus('idle');
+                              setUploadedSessionId(null);
+                              setUploadError(null);
+                            }}
+                            className="p-1 hover:bg-white/10 rounded-full"
+                          >
+                            <X className="w-4 h-4 text-zinc-400" />
+                          </button>
+                        </div>
+                        {/* Upload Progress Bar */}
+                        {uploadStatus === 'uploading' && (
+                          <div className="w-full max-w-xs">
+                            <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                              <motion.div 
+                                className="h-full bg-primary"
+                                initial={{ width: 0 }}
+                                animate={{ width: `${uploadProgress}%` }}
+                                transition={{ duration: 0.3 }}
+                              />
+                            </div>
+                            <p className="text-xs text-zinc-400 mt-1">Validating your resume...</p>
+                          </div>
+                        )}
+                        {uploadStatus === 'uploaded' && (
+                          <p className="text-xs text-emerald-400">✓ Resume validated and ready</p>
+                        )}
+                        {uploadStatus === 'error' && (
+                          <p className="text-xs text-red-400">{uploadError}</p>
+                        )}
                       </div>
                     ) : (
                       <div className="py-2">
