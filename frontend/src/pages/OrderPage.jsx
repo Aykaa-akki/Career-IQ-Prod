@@ -218,6 +218,7 @@ export default function OrderPage() {
   const [uploadedSessionId, setUploadedSessionId] = useState(null);
   const [uploadError, setUploadError] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadingFile, setUploadingFile] = useState(null); // Track which file triggered the upload: 'resume' | 'linkedin' | null
 
   // Preload Razorpay script on page load for faster checkout
   const preloadRazorpayScript = useCallback(() => {
@@ -259,7 +260,7 @@ export default function OrderPage() {
   }, []);
 
   // NEW: Background upload function - uploads files immediately when ready
-  const uploadFilesInBackground = useCallback(async (resume, linkedin, role, phone, code) => {
+  const uploadFilesInBackground = useCallback(async (resume, linkedin, role, phone, code, triggerFile = 'resume') => {
     if (!resume || !role.trim() || !phone.trim() || phone.replace(/\D/g, '').length < 10) {
       return; // Don't upload until all required fields are filled
     }
@@ -269,6 +270,7 @@ export default function OrderPage() {
     setUploadError(null);
     setUploadedSessionId(null);
     setUploadProgress(10);
+    setUploadingFile(triggerFile); // Track which file triggered the upload
 
     const utmParams = getUTMParams();
     const formData = new FormData();
@@ -300,12 +302,14 @@ export default function OrderPage() {
       setUploadProgress(100);
       setUploadedSessionId(uploadRes.data.session_id);
       setUploadStatus('uploaded');
+      setUploadingFile(null);
       
     } catch (err) {
       const errorMessage = err.response?.data?.detail || "Failed to process your files. Please try again.";
       setUploadError(errorMessage);
       setUploadStatus('error');
       setUploadProgress(0);
+      setUploadingFile(null);
     }
   }, [formatE164]);
 
@@ -317,13 +321,15 @@ export default function OrderPage() {
       const timeoutId = setTimeout(() => {
         // Only upload if not already uploaded or there was an error
         if (uploadStatus === 'idle' || uploadStatus === 'error') {
-          uploadFilesInBackground(resumeFile, linkedinFile, targetRole, phoneNumber, countryCode);
+          // Determine which file triggered this upload
+          const trigger = uploadingFile || 'resume';
+          uploadFilesInBackground(resumeFile, linkedinFile, targetRole, phoneNumber, countryCode, trigger);
         }
       }, 500);
       
       return () => clearTimeout(timeoutId);
     }
-  }, [resumeFile, linkedinFile, targetRole, phoneNumber, countryCode, uploadStatus, uploadFilesInBackground]);
+  }, [resumeFile, linkedinFile, targetRole, phoneNumber, countryCode, uploadStatus, uploadFilesInBackground, uploadingFile]);
 
   // NEW: Reset upload status when files change
   useEffect(() => {
@@ -333,6 +339,14 @@ export default function OrderPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resumeFile, linkedinFile, targetRole]); // Reset when these change, intentionally excluding uploadStatus
+
+  // Helper function to clear file input
+  const clearFileInput = useCallback((inputId) => {
+    const input = document.getElementById(inputId);
+    if (input) {
+      input.value = '';
+    }
+  }, []);
 
   const handleFileDrop = useCallback((e, type) => {
     e.preventDefault();
@@ -356,6 +370,7 @@ export default function OrderPage() {
     setUploadStatus('idle');
     setUploadedSessionId(null);
     setUploadError(null);
+    setUploadingFile(type); // Track which file is being uploaded
     
     if (type === 'resume') {
       setResumeFile(file);
@@ -363,6 +378,22 @@ export default function OrderPage() {
       setLinkedinFile(file);
     }
   }, []);
+
+  // Handle file removal
+  const handleRemoveFile = useCallback((type) => {
+    if (type === 'resume') {
+      setResumeFile(null);
+      clearFileInput('resume-input');
+    } else {
+      setLinkedinFile(null);
+      clearFileInput('linkedin-input');
+    }
+    // Reset upload state
+    setUploadStatus('idle');
+    setUploadedSessionId(null);
+    setUploadError(null);
+    setUploadingFile(null);
+  }, [clearFileInput]);
 
   const handleSubmit = async () => {
     // Validation
@@ -664,7 +695,7 @@ export default function OrderPage() {
                     {resumeFile ? (
                       <div className="flex flex-col items-center gap-2">
                         <div className="flex items-center justify-center gap-3">
-                          {uploadStatus === 'uploading' ? (
+                          {uploadStatus === 'uploading' && uploadingFile === 'resume' ? (
                             <Loader2 className="w-5 h-5 text-primary animate-spin" />
                           ) : uploadStatus === 'uploaded' ? (
                             <CheckCircle2 className="w-5 h-5 text-emerald-500" />
@@ -677,18 +708,15 @@ export default function OrderPage() {
                           <button 
                             onClick={(e) => { 
                               e.stopPropagation(); 
-                              setResumeFile(null); 
-                              setUploadStatus('idle');
-                              setUploadedSessionId(null);
-                              setUploadError(null);
+                              handleRemoveFile('resume');
                             }}
                             className="p-1 hover:bg-white/10 rounded-full"
                           >
                             <X className="w-4 h-4 text-zinc-400" />
                           </button>
                         </div>
-                        {/* Upload Progress Bar */}
-                        {uploadStatus === 'uploading' && (
+                        {/* Upload Progress Bar - only show for resume */}
+                        {uploadStatus === 'uploading' && uploadingFile === 'resume' && (
                           <div className="w-full max-w-xs">
                             <div className="h-1 bg-white/10 rounded-full overflow-hidden">
                               <motion.div 
@@ -702,7 +730,7 @@ export default function OrderPage() {
                           </div>
                         )}
                         {uploadStatus === 'uploaded' && (
-                          <p className="text-xs text-emerald-400">✓ Resume validated and ready</p>
+                          <p className="text-xs text-emerald-400">✓ Files validated and ready</p>
                         )}
                         {uploadStatus === 'error' && (
                           <p className="text-xs text-red-400">{uploadError}</p>
@@ -725,7 +753,9 @@ export default function OrderPage() {
                   </Label>
                   <div 
                     className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-all ${
-                      linkedinFile 
+                      uploadStatus === 'uploading' && uploadingFile === 'linkedin'
+                        ? 'border-primary/50 bg-primary/10'
+                        : linkedinFile 
                         ? 'border-emerald-500/50 bg-emerald-500/10' 
                         : 'border-white/20 bg-white/5 hover:border-primary/50 hover:bg-white/[0.07]'
                     }`}
@@ -742,15 +772,38 @@ export default function OrderPage() {
                       data-testid="linkedin-upload-input"
                     />
                     {linkedinFile ? (
-                      <div className="flex items-center justify-center gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                        <span className="text-white text-sm font-medium">{linkedinFile.name}</span>
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setLinkedinFile(null); }}
-                          className="p-1 hover:bg-white/10 rounded-full"
-                        >
-                          <X className="w-4 h-4 text-zinc-400" />
-                        </button>
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="flex items-center justify-center gap-3">
+                          {uploadStatus === 'uploading' && uploadingFile === 'linkedin' ? (
+                            <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                          ) : (
+                            <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                          )}
+                          <span className="text-white text-sm font-medium">{linkedinFile.name}</span>
+                          <button 
+                            onClick={(e) => { 
+                              e.stopPropagation(); 
+                              handleRemoveFile('linkedin');
+                            }}
+                            className="p-1 hover:bg-white/10 rounded-full"
+                          >
+                            <X className="w-4 h-4 text-zinc-400" />
+                          </button>
+                        </div>
+                        {/* Upload Progress Bar - only show for linkedin */}
+                        {uploadStatus === 'uploading' && uploadingFile === 'linkedin' && (
+                          <div className="w-full max-w-xs">
+                            <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                              <motion.div 
+                                className="h-full bg-primary"
+                                initial={{ width: 0 }}
+                                animate={{ width: `${uploadProgress}%` }}
+                                transition={{ duration: 0.3 }}
+                              />
+                            </div>
+                            <p className="text-xs text-zinc-400 mt-1">Validating LinkedIn profile...</p>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div className="py-2">
