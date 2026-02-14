@@ -211,11 +211,36 @@ export default function OrderPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [consentError, setConsentError] = useState(false);
   const [razorpayKey, setRazorpayKey] = useState(null);
+  const [razorpayReady, setRazorpayReady] = useState(false);
+  
+  // NEW: Background upload state for instant checkout
+  const [uploadStatus, setUploadStatus] = useState('idle'); // 'idle' | 'uploading' | 'uploaded' | 'error'
+  const [uploadedSessionId, setUploadedSessionId] = useState(null);
+  const [uploadError, setUploadError] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  // Preload Razorpay script on page load for faster checkout
+  const preloadRazorpayScript = useCallback(() => {
+    if (window.Razorpay) {
+      setRazorpayReady(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => setRazorpayReady(true);
+    script.onerror = () => console.error("Failed to load Razorpay script");
+    document.body.appendChild(script);
+  }, []);
 
   useEffect(() => {
     // Scroll to top on mount
     window.scrollTo(0, 0);
     
+    // Preload Razorpay script immediately for faster checkout
+    preloadRazorpayScript();
+    
+    // Fetch Razorpay key
     const fetchKey = async () => {
       try {
         const res = await axios.get(`${API_URL}/api/razorpay-key`);
@@ -225,7 +250,88 @@ export default function OrderPage() {
       }
     };
     fetchKey();
+  }, [preloadRazorpayScript]);
+
+  // Format phone to E.164
+  const formatE164 = useCallback((code, number) => {
+    const cleanNumber = number.replace(/\D/g, '');
+    return `${code}${cleanNumber}`;
   }, []);
+
+  // NEW: Background upload function - uploads files immediately when ready
+  const uploadFilesInBackground = useCallback(async (resume, linkedin, role, phone, code) => {
+    if (!resume || !role.trim() || !phone.trim() || phone.replace(/\D/g, '').length < 10) {
+      return; // Don't upload until all required fields are filled
+    }
+
+    // Reset previous upload state
+    setUploadStatus('uploading');
+    setUploadError(null);
+    setUploadedSessionId(null);
+    setUploadProgress(10);
+
+    const utmParams = getUTMParams();
+    const formData = new FormData();
+    formData.append('resume', resume);
+    formData.append('target_role', role.trim());
+    formData.append('mobile_number', formatE164(code, phone));
+    
+    if (linkedin) {
+      formData.append('linkedin', linkedin);
+    }
+
+    // Append UTM params
+    if (utmParams.utm_source) formData.append('utm_source', utmParams.utm_source);
+    if (utmParams.utm_medium) formData.append('utm_medium', utmParams.utm_medium);
+    if (utmParams.utm_campaign) formData.append('utm_campaign', utmParams.utm_campaign);
+    if (utmParams.utm_adset) formData.append('utm_adset', utmParams.utm_adset);
+    if (utmParams.utm_adcreative) formData.append('utm_adcreative', utmParams.utm_adcreative);
+
+    try {
+      setUploadProgress(30);
+      const uploadRes = await axios.post(`${API_URL}/api/upload`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (progressEvent) => {
+          const progress = Math.round((progressEvent.loaded * 60) / progressEvent.total) + 30;
+          setUploadProgress(Math.min(progress, 90));
+        }
+      });
+
+      setUploadProgress(100);
+      setUploadedSessionId(uploadRes.data.session_id);
+      setUploadStatus('uploaded');
+      
+    } catch (err) {
+      const errorMessage = err.response?.data?.detail || "Failed to process your files. Please try again.";
+      setUploadError(errorMessage);
+      setUploadStatus('error');
+      setUploadProgress(0);
+    }
+  }, [formatE164]);
+
+  // NEW: Trigger background upload when all required fields are filled
+  useEffect(() => {
+    // Only trigger if we have resume, target role, and valid phone
+    if (resumeFile && targetRole.trim() && phoneNumber.trim() && phoneNumber.replace(/\D/g, '').length >= 10) {
+      // Debounce to avoid multiple uploads while user is still typing
+      const timeoutId = setTimeout(() => {
+        // Only upload if not already uploaded or there was an error
+        if (uploadStatus === 'idle' || uploadStatus === 'error') {
+          uploadFilesInBackground(resumeFile, linkedinFile, targetRole, phoneNumber, countryCode);
+        }
+      }, 500);
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [resumeFile, linkedinFile, targetRole, phoneNumber, countryCode, uploadStatus, uploadFilesInBackground]);
+
+  // NEW: Reset upload status when files change
+  useEffect(() => {
+    if (uploadStatus === 'uploaded') {
+      setUploadStatus('idle');
+      setUploadedSessionId(null);
+    }
+  }, [resumeFile, linkedinFile, targetRole]); // Reset when these change
 
   const handleFileDrop = useCallback((e, type) => {
     e.preventDefault();
@@ -245,32 +351,17 @@ export default function OrderPage() {
       return;
     }
     
+    // Reset upload status when new file is selected
+    setUploadStatus('idle');
+    setUploadedSessionId(null);
+    setUploadError(null);
+    
     if (type === 'resume') {
       setResumeFile(file);
     } else {
       setLinkedinFile(file);
     }
   }, []);
-
-  // Format phone to E.164
-  const formatE164 = (code, number) => {
-    const cleanNumber = number.replace(/\D/g, '');
-    return `${code}${cleanNumber}`;
-  };
-
-  const loadRazorpayScript = () => {
-    return new Promise((resolve) => {
-      if (window.Razorpay) {
-        resolve(true);
-        return;
-      }
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
 
   const handleSubmit = async () => {
     // Validation
@@ -294,8 +385,13 @@ export default function OrderPage() {
       return;
     }
 
+    // Check if there was an upload error
+    if (uploadStatus === 'error') {
+      toast.error(uploadError || "There was an issue with your files. Please re-upload.");
+      return;
+    }
+
     // Meta Tracking: Push dataLayer event for AddToCart tracking
-    // This fires BEFORE payment flow starts (for GTM → Meta AddToCart)
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
       event: 'careerIQ_payment_cta_click'
@@ -303,46 +399,62 @@ export default function OrderPage() {
 
     setIsProcessing(true);
 
-    // Get UTM parameters for attribution tracking
     const utmParams = getUTMParams();
 
     try {
-      // Step 1: Upload files
-      const formData = new FormData();
-      formData.append('resume', resumeFile);
-      formData.append('target_role', targetRole.trim());
-      formData.append('mobile_number', formatE164(countryCode, phoneNumber));
-      
-      if (linkedinFile) {
-        formData.append('linkedin', linkedinFile);
+      let sessionId = uploadedSessionId;
+
+      // If files not yet uploaded (rare case), upload now
+      if (uploadStatus !== 'uploaded' || !sessionId) {
+        const formData = new FormData();
+        formData.append('resume', resumeFile);
+        formData.append('target_role', targetRole.trim());
+        formData.append('mobile_number', formatE164(countryCode, phoneNumber));
+        
+        if (linkedinFile) {
+          formData.append('linkedin', linkedinFile);
+        }
+
+        if (utmParams.utm_source) formData.append('utm_source', utmParams.utm_source);
+        if (utmParams.utm_medium) formData.append('utm_medium', utmParams.utm_medium);
+        if (utmParams.utm_campaign) formData.append('utm_campaign', utmParams.utm_campaign);
+        if (utmParams.utm_adset) formData.append('utm_adset', utmParams.utm_adset);
+        if (utmParams.utm_adcreative) formData.append('utm_adcreative', utmParams.utm_adcreative);
+
+        const uploadRes = await axios.post(`${API_URL}/api/upload`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        sessionId = uploadRes.data.session_id;
       }
 
-      // Append UTM params to form data
-      if (utmParams.utm_source) formData.append('utm_source', utmParams.utm_source);
-      if (utmParams.utm_medium) formData.append('utm_medium', utmParams.utm_medium);
-      if (utmParams.utm_campaign) formData.append('utm_campaign', utmParams.utm_campaign);
-      if (utmParams.utm_adset) formData.append('utm_adset', utmParams.utm_adset);
-      if (utmParams.utm_adcreative) formData.append('utm_adcreative', utmParams.utm_adcreative);
-
-      const uploadRes = await axios.post(`${API_URL}/api/upload`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-
-      const sessionId = uploadRes.data.session_id;
-
-      // Step 2: Create Razorpay order (fixed ₹2999)
+      // ⚡ FAST PATH: Files already uploaded, just create order
       const orderRes = await axios.post(`${API_URL}/api/create-order`, {
         tier: 2999,
         session_id: sessionId,
-        ...utmParams // Include UTM params in order creation
+        ...utmParams
       });
 
       const { order_id, amount, currency } = orderRes.data;
 
-      // Step 3: Load Razorpay
-      const loaded = await loadRazorpayScript();
-      if (!loaded) {
-        throw new Error("Payment system failed to load. Please refresh and try again.");
+      // Check if Razorpay is ready (should be preloaded)
+      if (!window.Razorpay) {
+        await new Promise((resolve) => {
+          const checkInterval = setInterval(() => {
+            if (window.Razorpay) {
+              clearInterval(checkInterval);
+              resolve(true);
+            }
+          }, 100);
+          setTimeout(() => {
+            clearInterval(checkInterval);
+            resolve(false);
+          }, 5000);
+        });
+        
+        if (!window.Razorpay) {
+          throw new Error("Payment system failed to load. Please refresh and try again.");
+        }
       }
 
       const options = {
@@ -359,7 +471,7 @@ export default function OrderPage() {
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
               session_id: sessionId,
-              ...utmParams // Include UTM params in payment verification
+              ...utmParams
             });
 
             await axios.post(`${API_URL}/api/analyze`, {
@@ -528,8 +640,12 @@ export default function OrderPage() {
                   </Label>
                   <div 
                     className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-all ${
-                      resumeFile 
-                        ? 'border-emerald-500/50 bg-emerald-500/10' 
+                      uploadStatus === 'error' 
+                        ? 'border-red-500/50 bg-red-500/10'
+                        : uploadStatus === 'uploaded'
+                        ? 'border-emerald-500/50 bg-emerald-500/10'
+                        : resumeFile 
+                        ? 'border-primary/50 bg-primary/10' 
                         : 'border-white/20 bg-white/5 hover:border-primary/50 hover:bg-white/[0.07]'
                     }`}
                     onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
@@ -545,15 +661,51 @@ export default function OrderPage() {
                       data-testid="resume-upload-input"
                     />
                     {resumeFile ? (
-                      <div className="flex items-center justify-center gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                        <span className="text-white text-sm font-medium">{resumeFile.name}</span>
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setResumeFile(null); }}
-                          className="p-1 hover:bg-white/10 rounded-full"
-                        >
-                          <X className="w-4 h-4 text-zinc-400" />
-                        </button>
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="flex items-center justify-center gap-3">
+                          {uploadStatus === 'uploading' ? (
+                            <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                          ) : uploadStatus === 'uploaded' ? (
+                            <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                          ) : uploadStatus === 'error' ? (
+                            <AlertCircle className="w-5 h-5 text-red-500" />
+                          ) : (
+                            <FileText className="w-5 h-5 text-primary" />
+                          )}
+                          <span className="text-white text-sm font-medium">{resumeFile.name}</span>
+                          <button 
+                            onClick={(e) => { 
+                              e.stopPropagation(); 
+                              setResumeFile(null); 
+                              setUploadStatus('idle');
+                              setUploadedSessionId(null);
+                              setUploadError(null);
+                            }}
+                            className="p-1 hover:bg-white/10 rounded-full"
+                          >
+                            <X className="w-4 h-4 text-zinc-400" />
+                          </button>
+                        </div>
+                        {/* Upload Progress Bar */}
+                        {uploadStatus === 'uploading' && (
+                          <div className="w-full max-w-xs">
+                            <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                              <motion.div 
+                                className="h-full bg-primary"
+                                initial={{ width: 0 }}
+                                animate={{ width: `${uploadProgress}%` }}
+                                transition={{ duration: 0.3 }}
+                              />
+                            </div>
+                            <p className="text-xs text-zinc-400 mt-1">Validating your resume...</p>
+                          </div>
+                        )}
+                        {uploadStatus === 'uploaded' && (
+                          <p className="text-xs text-emerald-400">✓ Resume validated and ready</p>
+                        )}
+                        {uploadStatus === 'error' && (
+                          <p className="text-xs text-red-400">{uploadError}</p>
+                        )}
                       </div>
                     ) : (
                       <div className="py-2">
