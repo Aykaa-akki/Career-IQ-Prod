@@ -288,6 +288,7 @@ export default function OrderPage() {
     if (utmParams.utm_campaign) formData.append('utm_campaign', utmParams.utm_campaign);
     if (utmParams.utm_adset) formData.append('utm_adset', utmParams.utm_adset);
     if (utmParams.utm_adcreative) formData.append('utm_adcreative', utmParams.utm_adcreative);
+    if (utmParams.lp_version) formData.append('lp_version', utmParams.lp_version);
 
     try {
       setUploadProgress(30);
