@@ -1745,6 +1745,259 @@ async def get_razorpay_key():
     """Get Razorpay public key for frontend"""
     return {"key_id": os.environ.get('RAZORPAY_KEY_ID')}
 
+# ============================================
+# ADMIN DASHBOARD API ENDPOINTS
+# ============================================
+
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'Akki#2810')
+
+class AdminLoginRequest(BaseModel):
+    password: str
+
+@api_router.post("/admin/login")
+async def admin_login(request: AdminLoginRequest):
+    """Simple password authentication for admin dashboard"""
+    if request.password == ADMIN_PASSWORD:
+        return {"success": True, "message": "Login successful"}
+    raise HTTPException(status_code=401, detail="Invalid password")
+
+@api_router.get("/admin/stats")
+async def get_admin_stats(password: str):
+    """Get overview statistics for admin dashboard"""
+    if password != ADMIN_PASSWORD:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+    # Get all sessions
+    sessions = await db.sessions.find({}).to_list(length=None)
+    
+    total_leads = len(sessions)
+    paid_users = len([s for s in sessions if s.get('payment_status') == 'completed'])
+    revenue = paid_users * 2999  # Fixed price
+    conversion_rate = (paid_users / total_leads * 100) if total_leads > 0 else 0
+    reports_generated = len([s for s in sessions if s.get('status') == 'completed'])
+    
+    # Get unique phone numbers to detect repeats
+    phone_counts = {}
+    for s in sessions:
+        phone = s.get('mobile_number', '')
+        phone_counts[phone] = phone_counts.get(phone, 0) + 1
+    
+    repeat_leads = len([p for p, count in phone_counts.items() if count > 1])
+    unique_leads = len([p for p, count in phone_counts.items() if count == 1])
+    
+    # UTM source breakdown
+    utm_breakdown = {}
+    for s in sessions:
+        utm = s.get('utm_tracking', {})
+        source = utm.get('utm_source', 'direct') if utm else 'direct'
+        if source not in utm_breakdown:
+            utm_breakdown[source] = {'leads': 0, 'paid': 0, 'revenue': 0}
+        utm_breakdown[source]['leads'] += 1
+        if s.get('payment_status') == 'completed':
+            utm_breakdown[source]['paid'] += 1
+            utm_breakdown[source]['revenue'] += 2999
+    
+    # Funnel stats
+    uploaded = len([s for s in sessions if s.get('resume_text')])
+    payment_initiated = len([s for s in sessions if s.get('razorpay_order_id')])
+    
+    return {
+        "total_leads": total_leads,
+        "paid_users": paid_users,
+        "revenue": revenue,
+        "conversion_rate": round(conversion_rate, 2),
+        "reports_generated": reports_generated,
+        "unique_leads": unique_leads,
+        "repeat_leads": repeat_leads,
+        "utm_breakdown": utm_breakdown,
+        "funnel": {
+            "uploaded": uploaded,
+            "payment_initiated": payment_initiated,
+            "paid": paid_users,
+            "reports": reports_generated
+        }
+    }
+
+@api_router.get("/admin/leads")
+async def get_admin_leads(
+    password: str,
+    page: int = 1,
+    limit: int = 20,
+    status: Optional[str] = None,
+    utm_source: Optional[str] = None,
+    date_from: Optional[str] = None,
+    date_to: Optional[str] = None,
+    search: Optional[str] = None
+):
+    """Get paginated list of leads with filters"""
+    if password != ADMIN_PASSWORD:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+    # Build query
+    query = {}
+    if status and status != 'all':
+        query['payment_status'] = status
+    if utm_source and utm_source != 'all':
+        query['utm_tracking.utm_source'] = utm_source
+    if date_from:
+        query['created_at'] = {'$gte': date_from}
+    if date_to:
+        if 'created_at' in query:
+            query['created_at']['$lte'] = date_to
+        else:
+            query['created_at'] = {'$lte': date_to}
+    if search:
+        query['$or'] = [
+            {'mobile_number': {'$regex': search, '$options': 'i'}},
+            {'target_role': {'$regex': search, '$options': 'i'}}
+        ]
+    
+    # Get total count
+    total = await db.sessions.count_documents(query)
+    
+    # Get paginated results
+    skip = (page - 1) * limit
+    sessions = await db.sessions.find(query).sort('created_at', -1).skip(skip).limit(limit).to_list(length=limit)
+    
+    # Get all phone numbers to detect duplicates
+    all_phones = await db.sessions.distinct('mobile_number')
+    phone_counts = {}
+    all_sessions_for_count = await db.sessions.find({}, {'mobile_number': 1}).to_list(length=None)
+    for s in all_sessions_for_count:
+        phone = s.get('mobile_number', '')
+        phone_counts[phone] = phone_counts.get(phone, 0) + 1
+    
+    # Format leads
+    leads = []
+    for s in sessions:
+        phone = s.get('mobile_number', '')
+        is_repeat = phone_counts.get(phone, 1) > 1
+        
+        utm = s.get('utm_tracking', {}) or {}
+        
+        lead = {
+            "session_id": s.get('session_id'),
+            "created_at": s.get('created_at'),
+            "mobile_number": phone,
+            "target_role": s.get('target_role', ''),
+            "payment_status": s.get('payment_status', 'pending'),
+            "lead_type": "repeat" if is_repeat else "new",
+            "has_resume": bool(s.get('resume_text')),
+            "has_linkedin": bool(s.get('linkedin_text')),
+            "has_report": s.get('status') == 'completed',
+            "report_id": s.get('report_id'),
+            "utm_source": utm.get('utm_source', 'direct'),
+            "utm_medium": utm.get('utm_medium', ''),
+            "utm_campaign": utm.get('utm_campaign', ''),
+            "lp_version": "CQLPV-1",
+            "razorpay_payment_id": s.get('razorpay_payment_id'),
+            "payment_verified_at": s.get('payment_verified_at'),
+            "completed_at": s.get('completed_at')
+        }
+        leads.append(lead)
+    
+    # Get unique UTM sources for filter dropdown
+    utm_sources = await db.sessions.distinct('utm_tracking.utm_source')
+    utm_sources = [u for u in utm_sources if u]  # Remove None/empty
+    utm_sources = ['direct'] + utm_sources if 'direct' not in utm_sources else utm_sources
+    
+    return {
+        "leads": leads,
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "total_pages": (total + limit - 1) // limit,
+        "utm_sources": utm_sources
+    }
+
+@api_router.get("/admin/export")
+async def export_leads_csv(password: str):
+    """Export all leads as CSV"""
+    if password != ADMIN_PASSWORD:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+    sessions = await db.sessions.find({}).sort('created_at', -1).to_list(length=None)
+    
+    # Get phone counts for lead type
+    phone_counts = {}
+    for s in sessions:
+        phone = s.get('mobile_number', '')
+        phone_counts[phone] = phone_counts.get(phone, 0) + 1
+    
+    # Build CSV
+    import csv
+    from io import StringIO
+    
+    output = StringIO()
+    writer = csv.writer(output)
+    
+    # Header
+    writer.writerow([
+        'Date', 'Phone', 'Target Role', 'Payment Status', 'Lead Type',
+        'Has Resume', 'Has LinkedIn', 'Has Report', 'UTM Source', 
+        'UTM Medium', 'UTM Campaign', 'LP Version', 'Payment ID'
+    ])
+    
+    for s in sessions:
+        phone = s.get('mobile_number', '')
+        is_repeat = phone_counts.get(phone, 1) > 1
+        utm = s.get('utm_tracking', {}) or {}
+        
+        writer.writerow([
+            s.get('created_at', ''),
+            phone,
+            s.get('target_role', ''),
+            s.get('payment_status', 'pending'),
+            'Repeat' if is_repeat else 'New',
+            'Yes' if s.get('resume_text') else 'No',
+            'Yes' if s.get('linkedin_text') else 'No',
+            'Yes' if s.get('status') == 'completed' else 'No',
+            utm.get('utm_source', 'direct'),
+            utm.get('utm_medium', ''),
+            utm.get('utm_campaign', ''),
+            'CQLPV-1',
+            s.get('razorpay_payment_id', '')
+        ])
+    
+    csv_content = output.getvalue()
+    
+    from fastapi.responses import Response
+    return Response(
+        content=csv_content,
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=careeriq_leads.csv"}
+    )
+
+@api_router.get("/admin/view-file/{session_id}/{file_type}")
+async def view_file(session_id: str, file_type: str, password: str):
+    """View resume, linkedin, or report for a session"""
+    if password != ADMIN_PASSWORD:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+    session = await db.sessions.find_one({"session_id": session_id})
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    if file_type == "resume":
+        content = session.get('resume_text', '')
+        if not content:
+            raise HTTPException(status_code=404, detail="Resume not found")
+        return {"type": "text", "content": content[:5000], "truncated": len(content) > 5000}
+    
+    elif file_type == "linkedin":
+        content = session.get('linkedin_text', '')
+        if not content:
+            raise HTTPException(status_code=404, detail="LinkedIn not found")
+        return {"type": "text", "content": content[:5000], "truncated": len(content) > 5000}
+    
+    elif file_type == "report":
+        report = session.get('report')
+        if not report:
+            raise HTTPException(status_code=404, detail="Report not found")
+        return {"type": "json", "content": report}
+    
+    raise HTTPException(status_code=400, detail="Invalid file type")
+
 # Include the router
 app.include_router(api_router)
 
