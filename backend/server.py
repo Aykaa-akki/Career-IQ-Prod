@@ -1044,7 +1044,8 @@ async def upload_files(
     utm_medium: Optional[str] = Form(None),
     utm_campaign: Optional[str] = Form(None),
     utm_adset: Optional[str] = Form(None),
-    utm_adcreative: Optional[str] = Form(None)
+    utm_adcreative: Optional[str] = Form(None),
+    lp_version: Optional[str] = Form(None)
 ):
     """Upload resume and optional LinkedIn PDF files - Simplified flow"""
     session_id = str(uuid.uuid4())
