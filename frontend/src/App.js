@@ -7,6 +7,7 @@ import ReportPage from "./pages/ReportPage";
 import ProcessingPage from "./pages/ProcessingPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsOfUsePage from "./pages/TermsOfUsePage";
+import AdminDashboard from "./pages/AdminDashboard";
 import { captureUTMParams, pushUTMToDataLayer } from "./utils/utm";
 import "./App.css";
 
@@ -42,6 +43,9 @@ function App() {
           {/* Legal pages */}
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/terms-of-use" element={<TermsOfUsePage />} />
+          
+          {/* Admin Dashboard */}
+          <Route path="/admin" element={<AdminDashboard />} />
           
           {/* Legacy routes */}
           <Route path="/order" element={<OrderPage />} />
