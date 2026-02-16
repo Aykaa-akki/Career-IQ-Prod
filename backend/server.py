@@ -1890,7 +1890,7 @@ async def get_admin_leads(
             "utm_source": utm.get('utm_source', 'direct'),
             "utm_medium": utm.get('utm_medium', ''),
             "utm_campaign": utm.get('utm_campaign', ''),
-            "lp_version": "CQLPV-1",
+            "lp_version": s.get('lp_version', 'CQLPV-1'),
             "razorpay_payment_id": s.get('razorpay_payment_id'),
             "payment_verified_at": s.get('payment_verified_at'),
             "completed_at": s.get('completed_at')
