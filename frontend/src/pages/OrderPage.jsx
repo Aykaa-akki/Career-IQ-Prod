@@ -893,6 +893,17 @@ export default function OrderPage() {
                   </p>
                 )}
 
+                {/* Trust & Refund Guarantee - Added for conversion */}
+                <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3 text-center">
+                  <p className="text-emerald-400 text-sm font-medium flex items-center justify-center gap-2">
+                    <Shield className="w-4 h-4" />
+                    100% Refund if Report Not Delivered
+                  </p>
+                  <p className="text-zinc-400 text-xs mt-1">
+                    Report delivered within 5 minutes • No questions asked refund policy
+                  </p>
+                </div>
+
                 {/* CTA Button - PROMINENT WHITE */}
                 <button
                   data-testid="submit-btn"
