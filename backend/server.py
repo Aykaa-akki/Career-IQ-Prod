@@ -1960,7 +1960,6 @@ async def export_leads_csv(password: str):
     
     csv_content = output.getvalue()
     
-    from fastapi.responses import Response
     return Response(
         content=csv_content,
         media_type="text/csv",
