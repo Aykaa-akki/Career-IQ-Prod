@@ -906,6 +906,11 @@ export default function LandingPage() {
   const [showStickyCTA, setShowStickyCTA] = useState(false);
   const section2Ref = useRef(null);
 
+  // Set LP version on mount
+  useEffect(() => {
+    setLPVersion(LP_VERSION);
+  }, []);
+
   const handleCTA = () => {
     // Navigate to checkout page - UTM params are already persisted in localStorage
     // and will be read by OrderPage when submitting
