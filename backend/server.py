@@ -1107,7 +1107,8 @@ async def upload_files(
         "payment_status": "pending",
         "target_role": target_role,
         "mobile_number": mobile_number,
-        "utm_tracking": utm_tracking if utm_tracking else None
+        "utm_tracking": utm_tracking if utm_tracking else None,
+        "lp_version": lp_version or "CQLPV-1"
     }
     
     await db.sessions.insert_one(session_doc)
