@@ -51,7 +51,7 @@ SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'support.career-iq@aykaa.me')
 SENDER_NAME = os.environ.get('SENDER_NAME', 'CareerIQ')
 
-app = FastAPI(title="CareerIQ Backend", redirect_slashes=False)
+app = FastAPI(title="CareerIQ Backend")
 api_router = APIRouter(prefix="/api")
 
 # Configure logging
