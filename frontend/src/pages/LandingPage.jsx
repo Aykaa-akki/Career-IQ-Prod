@@ -2,6 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Brain, Target, TrendingUp, BookOpen, ShieldAlert, MessageSquare, Sparkles } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
+import { setLPVersion } from "../utils/utm";
+
+// Landing Page Version Identifier - Update this when creating new versions
+const LP_VERSION = "CQLPV-1";
 
 // ============== SVG ILLUSTRATIONS ==============
 
@@ -901,6 +905,11 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const [showStickyCTA, setShowStickyCTA] = useState(false);
   const section2Ref = useRef(null);
+
+  // Set LP version on mount
+  useEffect(() => {
+    setLPVersion(LP_VERSION);
+  }, []);
 
   const handleCTA = () => {
     // Navigate to checkout page - UTM params are already persisted in localStorage
