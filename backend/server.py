@@ -1860,7 +1860,6 @@ async def get_admin_leads(
     sessions = await db.sessions.find(query).sort('created_at', -1).skip(skip).limit(limit).to_list(length=limit)
     
     # Get all phone numbers to detect duplicates
-    all_phones = await db.sessions.distinct('mobile_number')
     phone_counts = {}
     all_sessions_for_count = await db.sessions.find({}, {'mobile_number': 1}).to_list(length=None)
     for s in all_sessions_for_count:
