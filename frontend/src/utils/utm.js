@@ -12,6 +12,9 @@ const UTM_PARAMS = [
   'utm_adcreative'
 ];
 
+// Landing Page Version key
+const LP_VERSION_KEY = 'lp_version';
+
 /**
  * Capture UTM parameters from URL and store in localStorage
  * Only overwrites values if present in URL
@@ -26,8 +29,41 @@ export const captureUTMParams = () => {
         localStorage.setItem(param, value);
       }
     });
+    
+    // Capture LP version if present in URL
+    const lpVersion = urlParams.get('lp') || urlParams.get('lp_version');
+    if (lpVersion) {
+      localStorage.setItem(LP_VERSION_KEY, lpVersion);
+    }
   } catch (error) {
     console.error('Error capturing UTM params:', error);
+  }
+};
+
+/**
+ * Set the landing page version (called from landing page component)
+ * @param {string} version - The LP version identifier (e.g., 'CQLPV-1', 'CQLPV-2')
+ */
+export const setLPVersion = (version) => {
+  try {
+    if (version) {
+      localStorage.setItem(LP_VERSION_KEY, version);
+    }
+  } catch (error) {
+    console.error('Error setting LP version:', error);
+  }
+};
+
+/**
+ * Get the current landing page version
+ * @returns {string} LP version or default 'CQLPV-1'
+ */
+export const getLPVersion = () => {
+  try {
+    return localStorage.getItem(LP_VERSION_KEY) || 'CQLPV-1';
+  } catch (error) {
+    console.error('Error getting LP version:', error);
+    return 'CQLPV-1';
   }
 };
 
@@ -45,6 +81,9 @@ export const getUTMParams = () => {
         utmData[param] = value;
       }
     });
+    
+    // Include LP version in UTM data
+    utmData.lp_version = getLPVersion();
   } catch (error) {
     console.error('Error retrieving UTM params:', error);
   }
