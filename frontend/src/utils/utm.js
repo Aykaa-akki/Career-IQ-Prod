@@ -127,6 +127,7 @@ export const clearUTMParams = () => {
     UTM_PARAMS.forEach(param => {
       localStorage.removeItem(param);
     });
+    localStorage.removeItem(LP_VERSION_KEY);
   } catch (error) {
     console.error('Error clearing UTM params:', error);
   }
@@ -156,5 +157,7 @@ export default {
   hasUTMParams,
   buildURLWithUTM,
   clearUTMParams,
-  pushUTMToDataLayer
+  pushUTMToDataLayer,
+  setLPVersion,
+  getLPVersion
 };
