@@ -311,6 +311,7 @@ export default function AdminDashboard() {
       handleRefresh();
     }, 30000);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
   const formatDate = (dateStr) => {
