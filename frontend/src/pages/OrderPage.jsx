@@ -925,13 +925,20 @@ export default function OrderPage() {
                 </button>
 
                 {/* Security Microcopy */}
-                <div className="flex items-center justify-center gap-4 text-zinc-500 text-xs">
-                  <div className="flex items-center gap-1.5">
-                    <Lock className="w-3 h-3" />
-                    <span>Secure checkout</span>
+                <div className="flex flex-col items-center gap-2">
+                  <div className="flex items-center justify-center gap-4 text-zinc-500 text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <Lock className="w-3 h-3" />
+                      <span>Secure checkout</span>
+                    </div>
+                    <span className="text-zinc-600">•</span>
+                    <span>One-time payment of ₹2,999</span>
                   </div>
-                  <span className="text-zinc-600">•</span>
-                  <span>One-time payment of ₹2,999</span>
+                  <div className="flex items-center gap-3 text-zinc-500 text-xs">
+                    <span>💳 Cards</span>
+                    <span>📱 UPI</span>
+                    <span>🏦 Net Banking</span>
+                  </div>
                 </div>
               </div>
             </motion.div>
